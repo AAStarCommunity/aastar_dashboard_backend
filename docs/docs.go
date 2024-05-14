@@ -15,6 +15,22 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/healthz": {
+            "get": {
+                "description": "Get Healthz",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Healthz"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/api_key/list": {
             "get": {
                 "description": "DeleteApiKey",
@@ -190,22 +206,6 @@ const docTemplate = `{
                         "in": "query",
                         "required": true
                     }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/controller/healthz": {
-            "get": {
-                "description": "Get Healthz",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Healthz"
                 ],
                 "responses": {
                     "200": {

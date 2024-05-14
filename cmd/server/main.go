@@ -56,7 +56,7 @@ func main() {
 	_ = Engine.Run(getPort())
 }
 func buildRouter() {
-	Engine.GET("/health", Healthz)
+	Engine.GET("/api/healthz", Healthz)
 
 	Engine.GET("/api/v1/paymaster_strategy/list", controller.GetStrategyList)
 	Engine.GET("/api/v1/paymaster_strategy", controller.GetStrategy)
@@ -99,7 +99,7 @@ func buildSwagger(router *gin.Engine) {
 // @Description Get Healthz
 // @Accept json
 // @Product json
-// @Router /controller/healthz [get]
+// @Router /api/healthz [get]
 // @Success 200
 func Healthz(c *gin.Context) {
 	logrus.Debug("In the Healthz")

@@ -31,6 +31,16 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/healthz:
+    get:
+      consumes:
+      - application/json
+      description: Get Healthz
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Healthz
   /api/v1/api_key/list:
     get:
       consumes:
@@ -151,14 +161,4 @@ paths:
           description: OK
       tags:
       - GetStrategyList
-  /controller/healthz:
-    get:
-      consumes:
-      - application/json
-      description: Get Healthz
-      responses:
-        "200":
-          description: OK
-      tags:
-      - Healthz
 swagger: "2.0"
