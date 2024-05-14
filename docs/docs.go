@@ -15,6 +15,38 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/api_key/list": {
+            "get": {
+                "description": "DeleteApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DeleteApiKey"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Api Key",
+                        "name": "api_key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/paymaster_strategy": {
             "get": {
                 "description": "GetStrategy",
@@ -184,6 +216,26 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.UploadApiKeyRequest": {
+            "type": "object",
+            "properties": {
+                "api_key": {
+                    "type": "string"
+                },
+                "api_key_name": {
+                    "type": "string"
+                },
+                "extra_info": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "model.UploadStrategyRequest": {
             "type": "object",
             "properties": {

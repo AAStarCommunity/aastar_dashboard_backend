@@ -1,4 +1,17 @@
 definitions:
+  model.UploadApiKeyRequest:
+    properties:
+      api_key:
+        type: string
+      api_key_name:
+        type: string
+      extra_info:
+        additionalProperties:
+          type: string
+        type: object
+      user_id:
+        type: string
+    type: object
   model.UploadStrategyRequest:
     properties:
       project_code:
@@ -18,6 +31,27 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/v1/api_key/list:
+    get:
+      consumes:
+      - application/json
+      description: DeleteApiKey
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: Api Key
+        in: query
+        name: api_key
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - DeleteApiKey
   /api/v1/paymaster_strategy:
     delete:
       consumes:
