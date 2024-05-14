@@ -1,14 +1,24 @@
 package model
 
-import "math/big"
+import (
+	"gorm.io/datatypes"
+	"math/big"
+	"time"
+)
 
 type PaymasterStrategy struct {
-	Id                 string                     `gorm:"id"`
-	StrategyCode       string                     `json:"strategy_code"`
-	ProjectCode        string                     `json:"project_code"`
-	StrategyName       string                     `json:"strategy_name"`
-	ExecuteRestriction StrategyExecuteRestriction `gorm:"id" json:"execute_restriction"`
-	Extra              Extra                      `json:"extra"`
+	Id                 int64          `gorm:"type:int;primary_key"`
+	StrategyCode       string         `gorm:"type:varchar(255)" json:"strategy_code"`
+	ProjectCode        string         `gorm:"type:varchar(255)" json:"project_code"`
+	StrategyName       string         `gorm:"type:varchar(255)" json:"strategy_name"`
+	ExecuteRestriction datatypes.JSON `gorm:"type:json" json:"execute_restriction"`
+	Extra              Extra          `json:"extra"`
+	CreateAt           time.Time      `gorm:"column:created_at"`
+	UpdateAt           time.Time      `gorm:"column:update_at"`
+}
+
+func (PaymasterStrategy) TableName() string {
+	return "paymaster_strategy"
 }
 
 type StrategyExecuteRestriction struct {

@@ -3,6 +3,7 @@ package main
 import (
 	"aastar_dashboard_back/config"
 	"aastar_dashboard_back/docs"
+	"aastar_dashboard_back/repository"
 	"aastar_dashboard_back/rpc_server/controller"
 	"flag"
 	"github.com/gin-gonic/gin"
@@ -43,7 +44,13 @@ func main() {
 	gin.SetMode(gin.DebugMode)
 	logrus.SetLevel(logrus.DebugLevel)
 	buildSwagger(Engine)
-
+	config.Init("config/config.json")
+	logrus.Infof("Config loaded successfully Env: %s", config.Environment.Name)
+	logrus.Infof("System Config: %v", config.SystemConfigViper.AllSettings())
+	dsn := config.GetDsn()
+	logrus.Infof("DSN : %s", dsn)
+	repository.Init(dsn)
+	//DB Init
 	buildMod(Engine)
 	buildRouter()
 	_ = Engine.Run(getPort())
@@ -54,7 +61,7 @@ func buildRouter() {
 	Engine.GET("/api/v1/paymaster_strategy/list", controller.GetStrategyList)
 	Engine.GET("/api/v1/paymaster_strategy", controller.GetStrategy)
 	Engine.PUT("/api/v1/paymaster_strategy", controller.UpdateStrategy)
-	Engine.PUT("/api/v1/paymaster_strategy", controller.AddStrategy)
+	Engine.POST("/api/v1/paymaster_strategy", controller.AddStrategy)
 	Engine.DELETE("/api/v1/paymaster_strategy", controller.DeleteStrategy)
 
 	Engine.GET("/api/v1/api_key/list", controller.GetApiKeyList)
