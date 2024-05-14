@@ -14,7 +14,201 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/api/v1/paymaster_strategy": {
+            "get": {
+                "description": "GetStrategy",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetStrategy"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "PaymasterStrategy Code",
+                        "name": "strategy_code",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "description": "UpdateStrategy",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UpdateStrategy"
+                ],
+                "parameters": [
+                    {
+                        "description": "UploadStrategyRequest Model",
+                        "name": "uploadStrategyRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadStrategyRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "description": "AddStrategy",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AddStrategy"
+                ],
+                "parameters": [
+                    {
+                        "description": "UploadStrategyRequest Model",
+                        "name": "uploadStrategyRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadStrategyRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "description": "DeleteStrategy",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DeleteStrategy"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "PaymasterStrategy Code",
+                        "name": "strategy_code",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/paymaster_strategy/list": {
+            "get": {
+                "description": "GetStrategyList",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetStrategyList"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/controller/healthz": {
+            "get": {
+                "description": "Get Healthz",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Healthz"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.UploadStrategyRequest": {
+            "type": "object",
+            "properties": {
+                "project_code": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "strategy_code": {
+                    "type": "string"
+                },
+                "strategy_execute_restriction": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "strategy_name": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it

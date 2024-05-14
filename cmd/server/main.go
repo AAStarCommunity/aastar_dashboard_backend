@@ -1,12 +1,15 @@
 package main
 
 import (
+	"aastar_dashboard_back/config"
 	"aastar_dashboard_back/docs"
+	"aastar_dashboard_back/rpc_server/controller"
 	"flag"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"io"
 	"os"
 	"strings"
 	"time"
@@ -39,11 +42,49 @@ func main() {
 
 	gin.SetMode(gin.DebugMode)
 	logrus.SetLevel(logrus.DebugLevel)
-	docs.SwaggerInfo.BasePath = "/"
+	buildSwagger(Engine)
 
-	Engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	Engine.GET("/health", Healthz)
+	buildMod(Engine)
+	buildRouter()
 	_ = Engine.Run(getPort())
+}
+func buildRouter() {
+	Engine.GET("/health", Healthz)
+
+	Engine.GET("/api/v1/paymaster_strategy/list", controller.GetStrategyList)
+	Engine.GET("/api/v1/paymaster_strategy", controller.GetStrategy)
+	Engine.PUT("/api/v1/paymaster_strategy", controller.UpdateStrategy)
+	Engine.PUT("/api/v1/paymaster_strategy", controller.AddStrategy)
+	Engine.DELETE("/api/v1/paymaster_strategy", controller.DeleteStrategy)
+
+	Engine.GET("/api/v1/api_key/list", controller.GetApiKeyList)
+	Engine.GET("/api/v1/api_key", controller.GetApiKey)
+	Engine.PUT("/api/v1/api_key", controller.UpdateApiKey)
+	Engine.DELETE("/api/v1/api_key", controller.DeleteApiKey)
+	Engine.POST("/api/v1/api_key", controller.AddApiKey)
+
+}
+
+// buildMod set Mode by Environment
+func buildMod(routers *gin.Engine) {
+
+	// prod mode
+	if config.Environment.IsProduction() {
+		gin.SetMode(gin.ReleaseMode)
+		gin.DefaultWriter = io.Discard // disable gin log
+		return
+	}
+
+	// dev mod
+	if config.Environment.IsDevelopment() {
+		gin.SetMode(gin.DebugMode)
+
+		return
+	}
+}
+func buildSwagger(router *gin.Engine) {
+	docs.SwaggerInfo.BasePath = "/"
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
 // Healthz
@@ -51,7 +92,7 @@ func main() {
 // @Description Get Healthz
 // @Accept json
 // @Product json
-// @Router /api/healthz [get]
+// @Router /controller/healthz [get]
 // @Success 200
 func Healthz(c *gin.Context) {
 	logrus.Debug("In the Healthz")

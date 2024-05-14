@@ -1,4 +1,130 @@
+definitions:
+  model.UploadStrategyRequest:
+    properties:
+      project_code:
+        type: string
+      status:
+        type: string
+      strategy_code:
+        type: string
+      strategy_execute_restriction:
+        additionalProperties: {}
+        type: object
+      strategy_name:
+        type: string
+      user_id:
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /api/v1/paymaster_strategy:
+    delete:
+      consumes:
+      - application/json
+      description: DeleteStrategy
+      parameters:
+      - description: PaymasterStrategy Code
+        in: query
+        name: strategy_code
+        required: true
+        type: string
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - DeleteStrategy
+    get:
+      consumes:
+      - application/json
+      description: GetStrategy
+      parameters:
+      - description: PaymasterStrategy Code
+        in: query
+        name: strategy_code
+        required: true
+        type: string
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - GetStrategy
+    post:
+      consumes:
+      - application/json
+      description: AddStrategy
+      parameters:
+      - description: UploadStrategyRequest Model
+        in: body
+        name: uploadStrategyRequest
+        required: true
+        schema:
+          $ref: '#/definitions/model.UploadStrategyRequest'
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - AddStrategy
+    put:
+      consumes:
+      - application/json
+      description: UpdateStrategy
+      parameters:
+      - description: UploadStrategyRequest Model
+        in: body
+        name: uploadStrategyRequest
+        required: true
+        schema:
+          $ref: '#/definitions/model.UploadStrategyRequest'
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - UpdateStrategy
+  /api/v1/paymaster_strategy/list:
+    get:
+      consumes:
+      - application/json
+      description: GetStrategyList
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - GetStrategyList
+  /controller/healthz:
+    get:
+      consumes:
+      - application/json
+      description: Get Healthz
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Healthz
 swagger: "2.0"
