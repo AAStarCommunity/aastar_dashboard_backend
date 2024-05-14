@@ -11,8 +11,10 @@ type PaymasterStrategy struct {
 	StrategyCode       string         `gorm:"type:varchar(255)" json:"strategy_code"`
 	ProjectCode        string         `gorm:"type:varchar(255)" json:"project_code"`
 	StrategyName       string         `gorm:"type:varchar(255)" json:"strategy_name"`
+	UserId             string         `gorm:"type:varchar(255)" json:"user_id"`
+	Status             string         `gorm:"type:varchar(20)" json:"status"`
 	ExecuteRestriction datatypes.JSON `gorm:"type:json" json:"execute_restriction"`
-	Extra              Extra          `json:"extra"`
+	Extra              datatypes.JSON `json:"extra"`
 	CreateAt           time.Time      `gorm:"column:created_at"`
 	UpdateAt           time.Time      `gorm:"column:update_at"`
 }
@@ -30,6 +32,4 @@ type StrategyExecuteRestriction struct {
 	DayMaxUSD          int64    `json:"day_max_usd"`
 	StartTime          int64    `json:"start_time"`
 	EndTime            int64    `json:"end_time"`
-}
-type Extra struct {
 }
