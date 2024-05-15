@@ -3,8 +3,8 @@ package controller
 import (
 	"aastar_dashboard_back/model"
 	"aastar_dashboard_back/repository"
-	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 // GetApiKeyList
@@ -77,28 +77,31 @@ func UpdateApiKey(ctx *gin.Context) {
 	err = repository.UpdateApiKey(apikey)
 }
 
-// AddApiKey
-// @Tags AddApiKey
-// @Description AddApiKey
+// ApplyApiKey
+// @Tags ApplyApiKey
+// @Description ApplyApiKey
 // @Accept json
 // @Product json
-// @Param uploadApiKeyRequest  body  model.UploadApiKeyRequest true "UploadApiKeyRequest Model"
+// @Param applyApiKeyRequest  body  model.ApplyApiKeyRequest true "UploadApiKeyRequest Model"
 // @Router /api/v1/api_key  [post]
 // @Success 200
-func AddApiKey(ctx *gin.Context) {
+func ApplyApiKey(ctx *gin.Context) {
+
 	response := model.GetResponse()
-	request := model.UploadApiKeyRequest{}
+	request := model.ApplyApiKeyRequest{}
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
 		response.FailCode(ctx, 400, err.Error())
 		return
 	}
-	apikey, err := convertUploadRequestToApiKey(request)
-	if err != nil {
-		response.FailCode(ctx, 400, err.Error())
-		return
+	apiKeyModule := model.ApiKeyModel{
+		UserId:  request.UserId,
+		KeyName: request.ApiKeyName,
 	}
-	err = repository.InsertApiKey(apikey)
+	apiKeySecret := uuid.New().String()
+	apiKeyModule.ApiKey = apiKeySecret
+
+	err = repository.InsertApiKey(apiKeyModule)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
 		return
@@ -112,26 +115,36 @@ func AddApiKey(ctx *gin.Context) {
 // @Description DeleteApiKey
 // @Accept json
 // @Product json
-// @Param user_id query string true "User ID"
 // @Param api_key query string true "Api Key"
 // @Router /api/v1/api_key  [delete]
 // @Success 200
 func DeleteApiKey(ctx *gin.Context) {
 	response := model.GetResponse()
+	apiKeyStr := ctx.Query("api_key")
+	if apiKeyStr == "" {
+		response.FailCode(ctx, 400, "api_key is required")
+		return
+	}
+	err := repository.DeleteApiKeyByApiKey(apiKeyStr)
+	if err != nil {
+		response.FailCode(ctx, 500, err.Error())
+		return
+	}
 	response.WithDataSuccess(ctx, gin.H{})
+
 }
-func convertUploadRequestToApiKey(uploadRequest model.UploadApiKeyRequest) (apikey model.ApiKey, err error) {
-	apikey = model.ApiKey{
+func convertUploadRequestToApiKey(uploadRequest model.UploadApiKeyRequest) (apikey model.ApiKeyModel, err error) {
+	apikey = model.ApiKeyModel{
 		UserId:  uploadRequest.UserId,
 		ApiKey:  uploadRequest.ApiKey,
 		KeyName: uploadRequest.ApiKeyName,
 	}
-	if len(uploadRequest.ExtraInfo) > 0 {
-		extraInfo, err := json.Marshal(uploadRequest.ExtraInfo)
-		if err != nil {
-			return apikey, err
-		}
-		apikey.Extra = extraInfo
-	}
+	//if len(uploadRequest.ExtraInfo) > 0 {
+	//	extraInfo, err := json.Marshal(uploadRequest.ExtraInfo)
+	//	if err != nil {
+	//		return apikey, err
+	//	}
+	//	apikey.Extra = extraInfo
+	//}
 	return apikey, nil
 }

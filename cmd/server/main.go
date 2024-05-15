@@ -73,7 +73,7 @@ func buildRouter() {
 	Engine.GET("/api/v1/api_key", controller.GetApiKey)
 	Engine.PUT("/api/v1/api_key", controller.UpdateApiKey)
 	Engine.DELETE("/api/v1/api_key", controller.DeleteApiKey)
-	Engine.POST("/api/v1/api_key", controller.AddApiKey)
+	Engine.POST("/api/v1/api_key/apply", controller.ApplyApiKey)
 
 }
 

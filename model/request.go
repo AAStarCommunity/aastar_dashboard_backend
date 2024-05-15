@@ -11,8 +11,12 @@ type UploadStrategyRequest struct {
 }
 
 type UploadApiKeyRequest struct {
-	ApiKey     string            `json:"api_key"`
-	UserId     string            `json:"user_id"`
-	ApiKeyName string            `json:"api_key_name"`
-	ExtraInfo  map[string]string `json:"extra_info"`
+	ApiKey     string `json:"api_key"`
+	UserId     string `json:"user_id"`
+	ApiKeyName string `json:"api_key_name"`
+}
+
+type ApplyApiKeyRequest struct {
+	UserId     string `json:"user_id"`
+	ApiKeyName string `json:"api_key_name"`
 }

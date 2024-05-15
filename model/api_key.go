@@ -2,8 +2,9 @@ package model
 
 import "gorm.io/datatypes"
 
-type ApiKey struct {
+type ApiKeyModel struct {
 	ID        int            `gorm:"primaryKey;autoIncrement;column:id" json:"id"`
+	ProjectId string         `gorm:"column:project_id" json:"project_id"`
 	UserId    string         `gorm:"column:user_id" json:"user_id"`
 	ApiKey    string         `gorm:"column:api_key" json:"api_key"`
 	KeyName   string         `gorm:"column:key_name" json:"key_name"`
@@ -12,6 +13,6 @@ type ApiKey struct {
 	UpdatedAt string         `gorm:"column:updated_at" json:"updated_at"`
 }
 
-func (ApiKey) TableName() string {
+func (ApiKeyModel) TableName() string {
 	return "paymaster_api_key"
 }
