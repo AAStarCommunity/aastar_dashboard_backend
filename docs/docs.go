@@ -81,21 +81,21 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "AddApiKey",
+                "description": "ApplyApiKey",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
-                    "AddApiKey"
+                    "ApplyApiKey"
                 ],
                 "parameters": [
                     {
                         "description": "UploadApiKeyRequest Model",
-                        "name": "uploadApiKeyRequest",
+                        "name": "applyApiKeyRequest",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UploadApiKeyRequest"
+                            "$ref": "#/definitions/model.ApplyApiKeyRequest"
                         }
                     }
                 ],
@@ -114,13 +114,6 @@ const docTemplate = `{
                     "DeleteApiKey"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "Api Key",
@@ -300,6 +293,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.ApplyApiKeyRequest": {
+            "type": "object",
+            "properties": {
+                "api_key_name": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "model.UploadApiKeyRequest": {
             "type": "object",
             "properties": {
@@ -308,12 +312,6 @@ const docTemplate = `{
                 },
                 "api_key_name": {
                     "type": "string"
-                },
-                "extra_info": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
                 },
                 "user_id": {
                     "type": "string"

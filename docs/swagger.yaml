@@ -1,14 +1,17 @@
 definitions:
+  model.ApplyApiKeyRequest:
+    properties:
+      api_key_name:
+        type: string
+      user_id:
+        type: string
+    type: object
   model.UploadApiKeyRequest:
     properties:
       api_key:
         type: string
       api_key_name:
         type: string
-      extra_info:
-        additionalProperties:
-          type: string
-        type: object
       user_id:
         type: string
     type: object
@@ -52,11 +55,6 @@ paths:
       - application/json
       description: DeleteApiKey
       parameters:
-      - description: User ID
-        in: query
-        name: user_id
-        required: true
-        type: string
       - description: Api Key
         in: query
         name: api_key
@@ -85,19 +83,19 @@ paths:
     post:
       consumes:
       - application/json
-      description: AddApiKey
+      description: ApplyApiKey
       parameters:
       - description: UploadApiKeyRequest Model
         in: body
-        name: uploadApiKeyRequest
+        name: applyApiKeyRequest
         required: true
         schema:
-          $ref: '#/definitions/model.UploadApiKeyRequest'
+          $ref: '#/definitions/model.ApplyApiKeyRequest'
       responses:
         "200":
           description: OK
       tags:
-      - AddApiKey
+      - ApplyApiKey
     put:
       consumes:
       - application/json
