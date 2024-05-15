@@ -37,6 +37,11 @@ func getPort() string {
 	return *aPort
 }
 
+// @contact.name   AAStar BackEndDashBoard
+// @contact.url    https://aastar.xyz
+// @BasePath /api
+// @title AAStar BackEndDashBoard API
+// @version v1
 func main() {
 
 	Engine = gin.New()

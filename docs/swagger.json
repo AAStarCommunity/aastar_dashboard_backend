@@ -1,8 +1,14 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "title": "AAStar BackEndDashBoard API",
+        "contact": {
+            "name": "AAStar BackEndDashBoard",
+            "url": "https://aastar.xyz"
+        },
+        "version": "v1"
     },
+    "basePath": "/api",
     "paths": {
         "/api/healthz": {
             "get": {
