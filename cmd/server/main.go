@@ -49,7 +49,7 @@ func main() {
 	if configPath == "" {
 		configPath = "config/config.json"
 	}
-	config.Init("config/config.json")
+	config.Init(configPath)
 	logrus.Infof("Config loaded successfully Env: %s", config.Environment.Name)
 	logrus.Infof("System Config: %v", config.SystemConfigViper.AllSettings())
 	dsn := config.GetDsn()
