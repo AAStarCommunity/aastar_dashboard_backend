@@ -45,6 +45,7 @@ func main() {
 	logrus.SetLevel(logrus.DebugLevel)
 	buildSwagger(Engine)
 	configPath := os.Getenv("CONFIG_PATH")
+	logrus.Infof("Config Path:[%s]", configPath)
 	if configPath == "" {
 		configPath = "config/config.json"
 	}
