@@ -33,6 +33,79 @@ const docTemplate = `{
         },
         "/api/v1/api_key/list": {
             "get": {
+                "description": "GetApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetApiKey"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Api Key",
+                        "name": "api_key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "description": "UpdateApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UpdateApiKey"
+                ],
+                "parameters": [
+                    {
+                        "description": "UploadApiKeyRequest Model",
+                        "name": "uploadApiKeyRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadApiKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "description": "AddApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AddApiKey"
+                ],
+                "parameters": [
+                    {
+                        "description": "UploadApiKeyRequest Model",
+                        "name": "uploadApiKeyRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadApiKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
                 "description": "DeleteApiKey",
                 "consumes": [
                     "application/json"
@@ -77,13 +150,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "PaymasterStrategy Code",
                         "name": "strategy_code",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
                         "in": "query",
                         "required": true
                     }
@@ -173,13 +239,6 @@ const docTemplate = `{
                         "name": "strategy_code",
                         "in": "query",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -239,6 +298,12 @@ const docTemplate = `{
         "model.UploadStrategyRequest": {
             "type": "object",
             "properties": {
+                "extra": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
                 "project_code": {
                     "type": "string"
                 },
@@ -250,7 +315,9 @@ const docTemplate = `{
                 },
                 "strategy_execute_restriction": {
                     "type": "object",
-                    "additionalProperties": {}
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 },
                 "strategy_name": {
                     "type": "string"

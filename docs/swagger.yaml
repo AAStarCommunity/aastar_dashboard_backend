@@ -14,6 +14,10 @@ definitions:
     type: object
   model.UploadStrategyRequest:
     properties:
+      extra:
+        additionalProperties:
+          type: string
+        type: object
       project_code:
         type: string
       status:
@@ -21,7 +25,8 @@ definitions:
       strategy_code:
         type: string
       strategy_execute_restriction:
-        additionalProperties: {}
+        additionalProperties:
+          type: string
         type: object
       strategy_name:
         type: string
@@ -42,7 +47,7 @@ paths:
       tags:
       - Healthz
   /api/v1/api_key/list:
-    get:
+    delete:
       consumes:
       - application/json
       description: DeleteApiKey
@@ -62,6 +67,53 @@ paths:
           description: OK
       tags:
       - DeleteApiKey
+    get:
+      consumes:
+      - application/json
+      description: GetApiKey
+      parameters:
+      - description: Api Key
+        in: query
+        name: api_key
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - GetApiKey
+    post:
+      consumes:
+      - application/json
+      description: AddApiKey
+      parameters:
+      - description: UploadApiKeyRequest Model
+        in: body
+        name: uploadApiKeyRequest
+        required: true
+        schema:
+          $ref: '#/definitions/model.UploadApiKeyRequest'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - AddApiKey
+    put:
+      consumes:
+      - application/json
+      description: UpdateApiKey
+      parameters:
+      - description: UploadApiKeyRequest Model
+        in: body
+        name: uploadApiKeyRequest
+        required: true
+        schema:
+          $ref: '#/definitions/model.UploadApiKeyRequest'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - UpdateApiKey
   /api/v1/paymaster_strategy:
     delete:
       consumes:
@@ -71,11 +123,6 @@ paths:
       - description: PaymasterStrategy Code
         in: query
         name: strategy_code
-        required: true
-        type: string
-      - description: User ID
-        in: query
-        name: user_id
         required: true
         type: string
       responses:
@@ -91,11 +138,6 @@ paths:
       - description: PaymasterStrategy Code
         in: query
         name: strategy_code
-        required: true
-        type: string
-      - description: User ID
-        in: query
-        name: user_id
         required: true
         type: string
       responses:
