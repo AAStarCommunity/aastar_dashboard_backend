@@ -1,12 +1,12 @@
 package model
 
 type UploadStrategyRequest struct {
-	StrategyCode       string            `json:"strategy_code"`
-	ProjectCode        string            `json:"project_code"`
-	StrategyName       string            `json:"strategy_name"`
-	Status             string            `json:"status"`
-	ExecuteRestriction map[string]string `json:"strategy_execute_restriction"`
-	Extra              map[string]string `json:"extra"`
+	StrategyCode     string   `json:"strategy_code"`
+	ProjectCode      string   `json:"project_code"`
+	StrategyName     string   `json:"strategy_name"`
+	Description      string   `json:"description"`
+	ChainIdWhitelist []string `json:"chain_id_whitelist"`
+	AddressBlockList []string `json:"address_block_list"`
 }
 
 type UploadApiKeyRequest struct {

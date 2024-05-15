@@ -1,12 +1,10 @@
 package controller
 
 import (
-	"aastar_dashboard_back/global_const"
 	"aastar_dashboard_back/model"
 	"aastar_dashboard_back/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"time"
 )
 
 // GetApiKeyList
@@ -79,12 +77,16 @@ func UpdateApiKey(ctx *gin.Context) {
 		response.FailCode(ctx, 400, err.Error())
 		return
 	}
+
 	apikey, err := convertUploadRequestToApiKey(request)
 	apikey.UserId = userId
 	if err != nil {
 		response.FailCode(ctx, 400, err.Error())
 		return
 	}
+	//timeNow := time.Now()
+	//timeStr := timeNow.Format(global_const.TimeFormat)
+	//apikey.UpdatedAt = timeStr
 	err = repository.UpdateApiKey(apikey)
 }
 
@@ -117,17 +119,13 @@ func ApplyApiKey(ctx *gin.Context) {
 	}
 	apiKeySecret := uuid.New().String()
 	apiKeyModule.ApiKey = apiKeySecret
-	time := time.Now()
-	timeStr := time.Format(global_const.TimeFormat)
-	apiKeyModule.CreatedAt = timeStr
-	apiKeyModule.UpdatedAt = timeStr
 
 	err = repository.InsertApiKey(apiKeyModule)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
 		return
 	}
-	response.WithDataSuccess(ctx, gin.H{})
+	response.WithDataSuccess(ctx, apiKeyModule)
 
 }
 

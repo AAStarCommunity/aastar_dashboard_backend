@@ -3,6 +3,7 @@ package controller
 import (
 	"aastar_dashboard_back/model"
 	"aastar_dashboard_back/repository"
+	"aastar_dashboard_back/util"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/xerrors"
@@ -54,13 +55,20 @@ func AddStrategy(ctx *gin.Context) {
 		response.FailCode(ctx, 400, err.Error())
 		return
 	}
+	userId := ctx.GetHeader("user_id")
+	prefixLen := 10
+	if len(userId) < prefixLen {
+		prefixLen = len(userId)
+	}
+
+	strategy.StrategyCode = strategy.StrategyName + "_" + userId[prefixLen:] + "_" + util.GenerateRandomString(10)
 	strategy.UserId = ctx.GetHeader("user_id")
 	err = repository.InsertStrategy(strategy)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
 		return
 	}
-	response.WithDataSuccess(ctx, gin.H{})
+	response.WithDataSuccess(ctx, strategy)
 }
 
 // UpdateStrategy
@@ -148,21 +156,25 @@ func convertUploadRequestToStrategy(request model.UploadStrategyRequest) (model.
 		StrategyCode: request.StrategyCode,
 		ProjectCode:  request.ProjectCode,
 		StrategyName: request.StrategyName,
-		Status:       request.Status,
 	}
-	if len(request.ExecuteRestriction) != 0 {
-		executeRestrictionJson, err := json.Marshal(request.ExecuteRestriction)
-		if err != nil {
-			return strategy, xerrors.Errorf("error when marshal executeRestriction: %w", err)
-		}
-		strategy.ExecuteRestriction = executeRestrictionJson
+	executeRestriction := make(map[string]any)
+	if len(request.ChainIdWhitelist) != 0 {
+		executeRestriction["chain_id_whitelist"] = request.ChainIdWhitelist
 	}
-	if len(request.Extra) != 0 {
-		extraJson, err := json.Marshal(request.Extra)
-		if err != nil {
-			return strategy, xerrors.Errorf("error when marshal extra: %w", err)
-		}
-		strategy.Extra = extraJson
+	if len(request.AddressBlockList) != 0 {
+		executeRestriction["address_block_list"] = request.AddressBlockList
 	}
+	executeRestrictionJson, err := json.Marshal(executeRestriction)
+	if err != nil {
+		return strategy, xerrors.Errorf("error when marshal execute restriction: %w", err)
+	}
+	strategy.ExecuteRestriction = executeRestrictionJson
+	//if len(request.Extra) != 0 {
+	//	extraJson, err := json.Marshal(request.Extra)
+	//	if err != nil {
+	//		return strategy, xerrors.Errorf("error when marshal extra: %w", err)
+	//	}
+	//	strategy.Extra = extraJson
+	//}
 	return strategy, nil
 }

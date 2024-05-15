@@ -14,20 +14,20 @@ definitions:
     type: object
   model.UploadStrategyRequest:
     properties:
-      extra:
-        additionalProperties:
+      address_block_list:
+        items:
           type: string
-        type: object
-      project_code:
+        type: array
+      chain_id_whitelist:
+        items:
+          type: string
+        type: array
+      description:
         type: string
-      status:
+      project_code:
         type: string
       strategy_code:
         type: string
-      strategy_execute_restriction:
-        additionalProperties:
-          type: string
-        type: object
       strategy_name:
         type: string
     type: object

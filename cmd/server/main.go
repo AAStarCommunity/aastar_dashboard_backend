@@ -5,6 +5,7 @@ import (
 	"aastar_dashboard_back/docs"
 	"aastar_dashboard_back/repository"
 	"aastar_dashboard_back/rpc_server/controller"
+	"aastar_dashboard_back/rpc_server/middlewares"
 	"flag"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -62,8 +63,15 @@ func main() {
 	repository.Init(dsn)
 	//DB Init
 	buildMod(Engine)
+	buildMid()
 	buildRouter()
 	_ = Engine.Run(getPort())
+}
+func buildMid() {
+	if config.Environment.IsDevelopment() {
+		Engine.Use(middlewares.LogHandler())
+	}
+	Engine.Use(middlewares.CorsHandler())
 }
 func buildRouter() {
 	Engine.GET("/api/healthz", Healthz)
@@ -89,6 +97,7 @@ func buildMod(routers *gin.Engine) {
 	if config.Environment.IsProduction() {
 		gin.SetMode(gin.ReleaseMode)
 		gin.DefaultWriter = io.Discard // disable gin log
+		logrus.Infof("Build Release Mode")
 		return
 	}
 

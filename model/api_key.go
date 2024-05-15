@@ -1,6 +1,9 @@
 package model
 
-import "gorm.io/datatypes"
+import (
+	"gorm.io/datatypes"
+	"time"
+)
 
 type ApiKeyModel struct {
 	ID          int            `gorm:"primaryKey;autoIncrement;column:id" json:"id"`
@@ -9,8 +12,8 @@ type ApiKeyModel struct {
 	ApiKey      string         `gorm:"column:api_key" json:"api_key"`
 	KeyName     string         `gorm:"column:key_name" json:"key_name"`
 	Extra       datatypes.JSON `gorm:"column:extra" json:"extra"`
-	CreatedAt   string         `gorm:"column:created_at" json:"created_at"`
-	UpdatedAt   string         `gorm:"column:updated_at" json:"updated_at"`
+	CreatedAt   time.Time      `gorm:"column:created_at" json:"created_at"`
+	UpdatedAt   time.Time      `gorm:"column:updated_at" json:"updated_at"`
 }
 
 func (ApiKeyModel) TableName() string {

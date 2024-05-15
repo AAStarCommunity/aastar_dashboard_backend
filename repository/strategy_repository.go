@@ -36,7 +36,7 @@ func InsertStrategy(strategy model.PaymasterStrategy) (err error) {
 	return nil
 }
 func UpdateStrategy(strategy model.PaymasterStrategy) (err error) {
-	tx := DataBase.Save(&strategy)
+	tx := DataBase.Model(&model.PaymasterStrategy{}).Where("strategy_code = ?", strategy.StrategyCode).Updates(strategy)
 	if tx.Error != nil {
 		return xerrors.Errorf("error when updating strategy: %w", tx.Error)
 	}

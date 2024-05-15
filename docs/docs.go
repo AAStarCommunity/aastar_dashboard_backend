@@ -362,26 +362,26 @@ const docTemplate = `{
         "model.UploadStrategyRequest": {
             "type": "object",
             "properties": {
-                "extra": {
-                    "type": "object",
-                    "additionalProperties": {
+                "address_block_list": {
+                    "type": "array",
+                    "items": {
                         "type": "string"
                     }
+                },
+                "chain_id_whitelist": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
                 },
                 "project_code": {
                     "type": "string"
                 },
-                "status": {
-                    "type": "string"
-                },
                 "strategy_code": {
                     "type": "string"
-                },
-                "strategy_execute_restriction": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
                 },
                 "strategy_name": {
                     "type": "string"
