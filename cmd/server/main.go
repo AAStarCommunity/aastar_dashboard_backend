@@ -44,6 +44,10 @@ func main() {
 	gin.SetMode(gin.DebugMode)
 	logrus.SetLevel(logrus.DebugLevel)
 	buildSwagger(Engine)
+	configPath := os.Getenv("CONFIG_PATH")
+	if configPath == "" {
+		configPath = "config/config.json"
+	}
 	config.Init("config/config.json")
 	logrus.Infof("Config loaded successfully Env: %s", config.Environment.Name)
 	logrus.Infof("System Config: %v", config.SystemConfigViper.AllSettings())
