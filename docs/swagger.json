@@ -60,6 +60,13 @@
                 ],
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "UploadApiKeyRequest Model",
                         "name": "uploadApiKeyRequest",
                         "in": "body",
@@ -138,7 +145,7 @@
                         "type": "string",
                         "description": "User ID",
                         "name": "user_id",
-                        "in": "query",
+                        "in": "header",
                         "required": true
                     }
                 ],

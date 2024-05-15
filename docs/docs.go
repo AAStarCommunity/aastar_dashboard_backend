@@ -68,6 +68,13 @@ const docTemplate = `{
                 ],
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "UploadApiKeyRequest Model",
                         "name": "uploadApiKeyRequest",
                         "in": "body",
@@ -146,7 +153,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "User ID",
                         "name": "user_id",
-                        "in": "query",
+                        "in": "header",
                         "required": true
                     }
                 ],

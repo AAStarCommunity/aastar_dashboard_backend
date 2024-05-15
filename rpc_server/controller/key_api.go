@@ -12,7 +12,7 @@ import (
 // @Description GetApiKeyList
 // @Accept json
 // @Product json
-// @Param user_id query string true "User ID"
+// @Param user_id header string true "User ID"
 // @Router /api/v1/api_key/list  [get]
 // @Success 200
 func GetApiKeyList(ctx *gin.Context) {
@@ -58,6 +58,7 @@ func GetApiKey(ctx *gin.Context) {
 // @Description UpdateApiKey
 // @Accept json
 // @Product json
+// @Param user_id header string true "User ID"
 // @Param uploadApiKeyRequest  body  model.UploadApiKeyRequest true "UploadApiKeyRequest Model"
 // @Router /api/v1/api_key  [put]
 // @Success 200
