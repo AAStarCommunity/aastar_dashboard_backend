@@ -107,7 +107,6 @@ func buildSwagger(router *gin.Engine) {
 // @Router /api/healthz [get]
 // @Success 200
 func Healthz(c *gin.Context) {
-	logrus.Debug("In the Healthz")
 	c.JSON(200, gin.H{
 		"hello":   "AAStar Dashboard",
 		"time":    time.Now(),

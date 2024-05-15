@@ -46,7 +46,7 @@ paths:
           description: OK
       tags:
       - Healthz
-  /api/v1/api_key/list:
+  /api/v1/api_key:
     delete:
       consumes:
       - application/json
@@ -114,6 +114,22 @@ paths:
           description: OK
       tags:
       - UpdateApiKey
+  /api/v1/api_key/list:
+    get:
+      consumes:
+      - application/json
+      description: GetApiKeyList
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - GetApiKeyList
   /api/v1/paymaster_strategy:
     delete:
       consumes:

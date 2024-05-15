@@ -31,7 +31,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/api_key/list": {
+        "/api/v1/api_key": {
             "get": {
                 "description": "GetApiKey",
                 "consumes": [
@@ -125,6 +125,31 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Api Key",
                         "name": "api_key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/api_key/list": {
+            "get": {
+                "description": "GetApiKeyList",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetApiKeyList"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
                         "in": "query",
                         "required": true
                     }

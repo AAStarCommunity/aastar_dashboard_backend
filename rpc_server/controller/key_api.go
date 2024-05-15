@@ -36,7 +36,7 @@ func GetApiKeyList(ctx *gin.Context) {
 // @Accept json
 // @Product json
 // @Param api_key query string true "Api Key"
-// @Router /api/v1/api_key/list  [get]
+// @Router /api/v1/api_key  [get]
 // @Success 200
 func GetApiKey(ctx *gin.Context) {
 	response := model.GetResponse()
@@ -59,7 +59,7 @@ func GetApiKey(ctx *gin.Context) {
 // @Accept json
 // @Product json
 // @Param uploadApiKeyRequest  body  model.UploadApiKeyRequest true "UploadApiKeyRequest Model"
-// @Router /api/v1/api_key/list  [put]
+// @Router /api/v1/api_key  [put]
 // @Success 200
 func UpdateApiKey(ctx *gin.Context) {
 	response := model.GetResponse()
@@ -83,7 +83,7 @@ func UpdateApiKey(ctx *gin.Context) {
 // @Accept json
 // @Product json
 // @Param uploadApiKeyRequest  body  model.UploadApiKeyRequest true "UploadApiKeyRequest Model"
-// @Router /api/v1/api_key/list  [post]
+// @Router /api/v1/api_key  [post]
 // @Success 200
 func AddApiKey(ctx *gin.Context) {
 	response := model.GetResponse()
@@ -114,7 +114,7 @@ func AddApiKey(ctx *gin.Context) {
 // @Product json
 // @Param user_id query string true "User ID"
 // @Param api_key query string true "Api Key"
-// @Router /api/v1/api_key/list  [delete]
+// @Router /api/v1/api_key  [delete]
 // @Success 200
 func DeleteApiKey(ctx *gin.Context) {
 	response := model.GetResponse()
