@@ -13,6 +13,7 @@ import (
 // @Description GetStrategy
 // @Accept json
 // @Product json
+// @Param user_id header string true "User ID"
 // @Param strategy_code query string true "PaymasterStrategy Code"
 // @Router /api/v1/paymaster_strategy  [get]
 // @Success 200
@@ -36,8 +37,8 @@ func GetStrategy(ctx *gin.Context) {
 // @Description AddStrategy
 // @Accept json
 // @Product json
+// @Param user_id header string true "User ID"
 // @Param uploadStrategyRequest  body  model.UploadStrategyRequest true "UploadStrategyRequest Model"
-// @Param user_id query string true "User ID"
 // @Router /api/v1/paymaster_strategy  [post]
 // @Success 200
 func AddStrategy(ctx *gin.Context) {
@@ -53,6 +54,7 @@ func AddStrategy(ctx *gin.Context) {
 		response.FailCode(ctx, 400, err.Error())
 		return
 	}
+	strategy.UserId = ctx.GetHeader("user_id")
 	err = repository.InsertStrategy(strategy)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
@@ -66,8 +68,8 @@ func AddStrategy(ctx *gin.Context) {
 // @Description UpdateStrategy
 // @Accept json
 // @Product json
+// @Param user_id header string true "User ID"
 // @Param uploadStrategyRequest  body  model.UploadStrategyRequest true "UploadStrategyRequest Model"
-// @Param user_id query string true "User ID"
 // @Router /api/v1/paymaster_strategy  [put]
 // @Success 200
 func UpdateStrategy(ctx *gin.Context) {
@@ -83,6 +85,7 @@ func UpdateStrategy(ctx *gin.Context) {
 		response.FailCode(ctx, 400, err.Error())
 		return
 	}
+	strategy.UserId = ctx.GetHeader("user_id")
 	err = repository.UpdateStrategy(strategy)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
@@ -96,6 +99,7 @@ func UpdateStrategy(ctx *gin.Context) {
 // @Description DeleteStrategy
 // @Accept json
 // @Product json
+// @Param user_id header string true "User ID"
 // @Param strategy_code query string true "PaymasterStrategy Code"
 // @Router /api/v1/paymaster_strategy  [delete]
 // @Success 200
@@ -119,13 +123,13 @@ func DeleteStrategy(ctx *gin.Context) {
 // @Description GetStrategyList
 // @Accept json
 // @Product json
-// @Param user_id query string true "User ID"
+// @Param user_id header string true "User ID"
 // @Router /api/v1/paymaster_strategy/list [get]
 // @Success 200
 func GetStrategyList(ctx *gin.Context) {
 	response := model.GetResponse()
 
-	userId := ctx.Query("user_id")
+	userId := ctx.GetHeader("user_id")
 	if userId == "" {
 		response := model.GetResponse()
 		response.FailCode(ctx, 400, "user_id is required")
@@ -141,7 +145,6 @@ func GetStrategyList(ctx *gin.Context) {
 
 func convertUploadRequestToStrategy(request model.UploadStrategyRequest) (model.PaymasterStrategy, error) {
 	strategy := model.PaymasterStrategy{
-		UserId:       request.UserId,
 		StrategyCode: request.StrategyCode,
 		ProjectCode:  request.ProjectCode,
 		StrategyName: request.StrategyName,

@@ -46,6 +46,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Api Key",
                         "name": "api_key",
                         "in": "query",
@@ -100,6 +107,13 @@ const docTemplate = `{
                 ],
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "UploadApiKeyRequest Model",
                         "name": "applyApiKeyRequest",
                         "in": "body",
@@ -124,6 +138,13 @@ const docTemplate = `{
                     "DeleteApiKey"
                 ],
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Api Key",
@@ -176,6 +197,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "PaymasterStrategy Code",
                         "name": "strategy_code",
                         "in": "query",
@@ -198,6 +226,13 @@ const docTemplate = `{
                 ],
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "UploadStrategyRequest Model",
                         "name": "uploadStrategyRequest",
                         "in": "body",
@@ -205,13 +240,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.UploadStrategyRequest"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -230,6 +258,13 @@ const docTemplate = `{
                 ],
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "UploadStrategyRequest Model",
                         "name": "uploadStrategyRequest",
                         "in": "body",
@@ -237,13 +272,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.UploadStrategyRequest"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -261,6 +289,13 @@ const docTemplate = `{
                     "DeleteStrategy"
                 ],
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "PaymasterStrategy Code",
@@ -290,7 +325,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "User ID",
                         "name": "user_id",
-                        "in": "query",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -308,9 +343,6 @@ const docTemplate = `{
             "properties": {
                 "api_key_name": {
                     "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
                 }
             }
         },
@@ -321,9 +353,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "api_key_name": {
-                    "type": "string"
-                },
-                "user_id": {
                     "type": "string"
                 }
             }
@@ -353,9 +382,6 @@ const docTemplate = `{
                     }
                 },
                 "strategy_name": {
-                    "type": "string"
-                },
-                "user_id": {
                     "type": "string"
                 }
             }

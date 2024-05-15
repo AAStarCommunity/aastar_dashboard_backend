@@ -38,6 +38,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Api Key",
                         "name": "api_key",
                         "in": "query",
@@ -92,6 +99,13 @@
                 ],
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "UploadApiKeyRequest Model",
                         "name": "applyApiKeyRequest",
                         "in": "body",
@@ -116,6 +130,13 @@
                     "DeleteApiKey"
                 ],
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Api Key",
@@ -168,6 +189,13 @@
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "PaymasterStrategy Code",
                         "name": "strategy_code",
                         "in": "query",
@@ -190,6 +218,13 @@
                 ],
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "UploadStrategyRequest Model",
                         "name": "uploadStrategyRequest",
                         "in": "body",
@@ -197,13 +232,6 @@
                         "schema": {
                             "$ref": "#/definitions/model.UploadStrategyRequest"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -222,6 +250,13 @@
                 ],
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "UploadStrategyRequest Model",
                         "name": "uploadStrategyRequest",
                         "in": "body",
@@ -229,13 +264,6 @@
                         "schema": {
                             "$ref": "#/definitions/model.UploadStrategyRequest"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -253,6 +281,13 @@
                     "DeleteStrategy"
                 ],
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "PaymasterStrategy Code",
@@ -282,7 +317,7 @@
                         "type": "string",
                         "description": "User ID",
                         "name": "user_id",
-                        "in": "query",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -300,9 +335,6 @@
             "properties": {
                 "api_key_name": {
                     "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
                 }
             }
         },
@@ -313,9 +345,6 @@
                     "type": "string"
                 },
                 "api_key_name": {
-                    "type": "string"
-                },
-                "user_id": {
                     "type": "string"
                 }
             }
@@ -345,9 +374,6 @@
                     }
                 },
                 "strategy_name": {
-                    "type": "string"
-                },
-                "user_id": {
                     "type": "string"
                 }
             }
