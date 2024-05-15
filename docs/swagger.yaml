@@ -89,27 +89,6 @@ paths:
           description: OK
       tags:
       - GetApiKey
-    post:
-      consumes:
-      - application/json
-      description: ApplyApiKey
-      parameters:
-      - description: User ID
-        in: header
-        name: user_id
-        required: true
-        type: string
-      - description: UploadApiKeyRequest Model
-        in: body
-        name: applyApiKeyRequest
-        required: true
-        schema:
-          $ref: '#/definitions/model.ApplyApiKeyRequest'
-      responses:
-        "200":
-          description: OK
-      tags:
-      - ApplyApiKey
     put:
       consumes:
       - application/json
@@ -131,6 +110,28 @@ paths:
           description: OK
       tags:
       - UpdateApiKey
+  /api/v1/api_key/apply:
+    post:
+      consumes:
+      - application/json
+      description: ApplyApiKey
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: UploadApiKeyRequest Model
+        in: body
+        name: applyApiKeyRequest
+        required: true
+        schema:
+          $ref: '#/definitions/model.ApplyApiKeyRequest'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - ApplyApiKey
   /api/v1/api_key/list:
     get:
       consumes:

@@ -97,6 +97,38 @@ const docTemplate = `{
                     }
                 }
             },
+            "delete": {
+                "description": "DeleteApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DeleteApiKey"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Api Key",
+                        "name": "api_key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/api_key/apply": {
             "post": {
                 "description": "ApplyApiKey",
                 "consumes": [
@@ -121,36 +153,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.ApplyApiKeyRequest"
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            },
-            "delete": {
-                "description": "DeleteApiKey",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "DeleteApiKey"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Api Key",
-                        "name": "api_key",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
