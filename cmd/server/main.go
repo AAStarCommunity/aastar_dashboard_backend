@@ -5,19 +5,21 @@ import (
 	"aastar_dashboard_back/docs"
 	"aastar_dashboard_back/repository"
 	"aastar_dashboard_back/rpc_server/controller"
+	"aastar_dashboard_back/rpc_server/controller/oauth"
 	"aastar_dashboard_back/rpc_server/middlewares"
 	"flag"
-	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	"io"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-var Engine *gin.Engine
+var engine *gin.Engine
 var aPort = flag.String("port", "", "Port")
 
 func getPort() string {
@@ -45,11 +47,11 @@ func getPort() string {
 // @version v1
 func main() {
 
-	Engine = gin.New()
+	engine = gin.New()
 
 	gin.SetMode(gin.DebugMode)
 	logrus.SetLevel(logrus.DebugLevel)
-	buildSwagger(Engine)
+	buildSwagger(engine)
 	configPath := os.Getenv("CONFIG_PATH")
 	logrus.Infof("Config Path:[%s]", configPath)
 	if configPath == "" {
@@ -57,37 +59,38 @@ func main() {
 	}
 	config.Init(configPath)
 	logrus.Infof("Config loaded successfully Env: %s", config.Environment.Name)
-	logrus.Infof("System Config: %v", config.SystemConfigViper.AllSettings())
+	logrus.Infof("System Config: %v", config.AllConfig())
 	dsn := config.GetDsn()
 	logrus.Infof("DSN : %s", dsn)
 	repository.Init(dsn)
 	//DB Init
-	buildMod(Engine)
+	buildMod(engine)
 	buildMid()
 	buildRouter()
-	_ = Engine.Run(getPort())
+	buildOAuth()
+	_ = engine.Run(getPort())
 }
 func buildMid() {
-	Engine.Use(middlewares.GenericRecoveryHandler())
+	engine.Use(middlewares.GenericRecoveryHandler())
 	if config.Environment.IsDevelopment() {
-		Engine.Use(middlewares.LogHandler())
+		engine.Use(middlewares.LogHandler())
 	}
-	Engine.Use(middlewares.CorsHandler())
+	engine.Use(middlewares.CorsHandler())
 }
 func buildRouter() {
-	Engine.GET("/api/healthz", Healthz)
+	engine.GET("/api/healthz", Healthz)
 
-	Engine.GET("/api/v1/paymaster_strategy/list", controller.GetStrategyList)
-	Engine.GET("/api/v1/paymaster_strategy", controller.GetStrategy)
-	Engine.PUT("/api/v1/paymaster_strategy", controller.UpdateStrategy)
-	Engine.POST("/api/v1/paymaster_strategy", controller.AddStrategy)
-	Engine.DELETE("/api/v1/paymaster_strategy", controller.DeleteStrategy)
+	engine.GET("/api/v1/paymaster_strategy/list", controller.GetStrategyList)
+	engine.GET("/api/v1/paymaster_strategy", controller.GetStrategy)
+	engine.PUT("/api/v1/paymaster_strategy", controller.UpdateStrategy)
+	engine.POST("/api/v1/paymaster_strategy", controller.AddStrategy)
+	engine.DELETE("/api/v1/paymaster_strategy", controller.DeleteStrategy)
 
-	Engine.GET("/api/v1/api_key/list", controller.GetApiKeyList)
-	Engine.GET("/api/v1/api_key", controller.GetApiKey)
-	Engine.PUT("/api/v1/api_key", controller.UpdateApiKey)
-	Engine.DELETE("/api/v1/api_key", controller.DeleteApiKey)
-	Engine.POST("/api/v1/api_key/apply", controller.ApplyApiKey)
+	engine.GET("/api/v1/api_key/list", controller.GetApiKeyList)
+	engine.GET("/api/v1/api_key", controller.GetApiKey)
+	engine.PUT("/api/v1/api_key", controller.UpdateApiKey)
+	engine.DELETE("/api/v1/api_key", controller.DeleteApiKey)
+	engine.POST("/api/v1/api_key/apply", controller.ApplyApiKey)
 
 }
 
@@ -112,6 +115,11 @@ func buildMod(routers *gin.Engine) {
 func buildSwagger(router *gin.Engine) {
 	docs.SwaggerInfo.BasePath = "/"
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+}
+
+// buildOAuth supports 3rd party login via OAuth
+func buildOAuth() {
+	engine.GET("/oauth/github", oauth.GithubOAuthLogin)
 }
 
 // Healthz
