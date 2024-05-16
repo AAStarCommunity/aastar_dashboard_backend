@@ -88,6 +88,7 @@ func UpdateApiKey(ctx *gin.Context) {
 	//timeStr := timeNow.Format(global_const.TimeFormat)
 	//apikey.UpdatedAt = timeStr
 	err = repository.UpdateApiKey(&apikey)
+	response.WithDataSuccess(ctx, apikey)
 }
 
 // ApplyApiKey
