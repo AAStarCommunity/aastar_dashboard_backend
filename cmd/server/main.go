@@ -68,6 +68,7 @@ func main() {
 	_ = Engine.Run(getPort())
 }
 func buildMid() {
+	Engine.Use(middlewares.GenericRecoveryHandler())
 	if config.Environment.IsDevelopment() {
 		Engine.Use(middlewares.LogHandler())
 	}

@@ -6,6 +6,7 @@ import (
 	"aastar_dashboard_back/util"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/xerrors"
 )
 
@@ -25,8 +26,9 @@ func GetStrategy(ctx *gin.Context) {
 		response.FailCode(ctx, 400, "strategy_code is required")
 		return
 	}
-	strategy, err := repository.SelectByStrategyCode(strategyCode)
+	strategy, err := repository.FindByStrategyCode(strategyCode)
 	if err != nil {
+		logrus.Errorf("error when finding strategy: %v", err)
 		response.FailCode(ctx, 500, err.Error())
 		return
 	}

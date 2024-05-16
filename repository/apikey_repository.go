@@ -23,6 +23,7 @@ func DeleteApiKeyByApiKey(apiKey string) (err error) {
 	return nil
 }
 func FindApiKeyByApiKey(apiKey string) (apikey *model.ApiKeyModel, err error) {
+	apikey = &model.ApiKeyModel{}
 	tx := dataBase.Where("api_key = ?", apiKey).First(&apikey)
 	if tx.Error != nil {
 		return apikey, xerrors.Errorf("error when finding apikey: %w", tx.Error)

@@ -22,7 +22,8 @@ func DeleteByStrategyCode(strategyCode string) (err error) {
 	}
 	return nil
 }
-func SelectByStrategyCode(strategyCode string) (strategy *model.PaymasterStrategy, err error) {
+func FindByStrategyCode(strategyCode string) (strategy *model.PaymasterStrategy, err error) {
+	strategy = &model.PaymasterStrategy{}
 	tx := dataBase.Where("strategy_code = ?", strategyCode).First(strategy)
 	if tx.Error != nil {
 		return strategy, xerrors.Errorf("error when finding strategy: %w", tx.Error)
