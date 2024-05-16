@@ -47,7 +47,7 @@ func GetApiKey(ctx *gin.Context) {
 		response.FailCode(ctx, 400, "api_key is required")
 		return
 	}
-	apiKeyRes, err := repository.SelectApiKeyByApiKey(apiKeyStr)
+	apiKeyRes, err := repository.FindApiKeyByApiKey(apiKeyStr)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
 		return
@@ -87,7 +87,7 @@ func UpdateApiKey(ctx *gin.Context) {
 	//timeNow := time.Now()
 	//timeStr := timeNow.Format(global_const.TimeFormat)
 	//apikey.UpdatedAt = timeStr
-	err = repository.UpdateApiKey(apikey)
+	err = repository.UpdateApiKey(&apikey)
 }
 
 // ApplyApiKey
@@ -120,7 +120,7 @@ func ApplyApiKey(ctx *gin.Context) {
 	apiKeySecret := uuid.New().String()
 	apiKeyModule.ApiKey = apiKeySecret
 
-	err = repository.InsertApiKey(apiKeyModule)
+	err = repository.CreateApiKey(&apiKeyModule)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
 		return

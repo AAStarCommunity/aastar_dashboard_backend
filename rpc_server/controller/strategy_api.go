@@ -63,7 +63,7 @@ func AddStrategy(ctx *gin.Context) {
 
 	strategy.StrategyCode = strategy.StrategyName + "_" + userId[prefixLen:] + "_" + util.GenerateRandomString(10)
 	strategy.UserId = ctx.GetHeader("user_id")
-	err = repository.InsertStrategy(strategy)
+	err = repository.CreateStrategy(&strategy)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
 		return
@@ -94,12 +94,12 @@ func UpdateStrategy(ctx *gin.Context) {
 		return
 	}
 	strategy.UserId = ctx.GetHeader("user_id")
-	err = repository.UpdateStrategy(strategy)
+	err = repository.UpdateStrategy(&strategy)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
 		return
 	}
-	response.WithDataSuccess(ctx, gin.H{})
+	response.WithDataSuccess(ctx, strategy)
 }
 
 // DeleteStrategy
