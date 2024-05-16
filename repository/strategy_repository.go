@@ -2,7 +2,9 @@ package repository
 
 import (
 	"aastar_dashboard_back/model"
+	"errors"
 	"golang.org/x/xerrors"
+	"gorm.io/gorm"
 )
 
 func SelectListByUserId(userId string) (strategies []model.PaymasterStrategy, err error) {
@@ -26,7 +28,11 @@ func FindByStrategyCode(strategyCode string) (strategy *model.PaymasterStrategy,
 	strategy = &model.PaymasterStrategy{}
 	tx := dataBase.Where("strategy_code = ?", strategyCode).First(strategy)
 	if tx.Error != nil {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			return nil, xerrors.Errorf("Can Not Find strategyCode %s", strategyCode)
+		}
 		return strategy, xerrors.Errorf("error when finding strategy: %w", tx.Error)
+
 	}
 	return strategy, nil
 }

@@ -2,7 +2,9 @@ package repository
 
 import (
 	"aastar_dashboard_back/model"
+	"errors"
 	"golang.org/x/xerrors"
+	"gorm.io/gorm"
 )
 
 func SelectApiKeyListByUserId(userId string) (apikeys []model.ApiKeyModel, err error) {
@@ -26,6 +28,9 @@ func FindApiKeyByApiKey(apiKey string) (apikey *model.ApiKeyModel, err error) {
 	apikey = &model.ApiKeyModel{}
 	tx := dataBase.Where("api_key = ?", apiKey).First(&apikey)
 	if tx.Error != nil {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			return nil, xerrors.Errorf("Can Not Find apiKey %s", apiKey)
+		}
 		return apikey, xerrors.Errorf("error when finding apikey: %w", tx.Error)
 	}
 	return apikey, nil
