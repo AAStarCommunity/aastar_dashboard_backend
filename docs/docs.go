@@ -374,11 +374,26 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
+                "day_max_usd": {
+                    "type": "number"
+                },
                 "description": {
                     "type": "string"
                 },
+                "end_time": {
+                    "type": "integer"
+                },
+                "global_max_usd": {
+                    "type": "number"
+                },
+                "per_user_max_usd": {
+                    "type": "number"
+                },
                 "project_code": {
                     "type": "string"
+                },
+                "start_time": {
+                    "type": "integer"
                 },
                 "strategy_code": {
                     "type": "string"

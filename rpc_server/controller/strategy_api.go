@@ -164,6 +164,22 @@ func convertUploadRequestToStrategy(request model.UploadStrategyRequest) (model.
 	if len(request.AddressBlockList) != 0 {
 		executeRestriction["address_block_list"] = request.AddressBlockList
 	}
+	if request.StartTime > 0 {
+		executeRestriction["start_time"] = request.StartTime
+	}
+	if request.EndTime > 0 {
+		executeRestriction["end_time"] = request.EndTime
+	}
+	if request.GlobalMaxUSD > 0 {
+		executeRestriction["global_max_usd"] = request.GlobalMaxUSD
+	}
+	if request.DayMaxUSD > 0 {
+		executeRestriction["day_max_usd"] = request.DayMaxUSD
+	}
+	if request.PerUserMaxUsd > 0 {
+		executeRestriction["per_user_max_usd"] = request.PerUserMaxUsd
+	}
+
 	executeRestrictionJson, err := json.Marshal(executeRestriction)
 	if err != nil {
 		return strategy, xerrors.Errorf("error when marshal execute restriction: %w", err)
