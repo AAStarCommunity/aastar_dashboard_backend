@@ -1,4 +1,260 @@
+basePath: /api
+definitions:
+  model.ApplyApiKeyRequest:
+    properties:
+      api_key_name:
+        type: string
+    type: object
+  model.UploadApiKeyRequest:
+    properties:
+      api_key:
+        type: string
+      api_key_name:
+        type: string
+    type: object
+  model.UploadStrategyRequest:
+    properties:
+      address_block_list:
+        items:
+          type: string
+        type: array
+      chain_id_whitelist:
+        items:
+          type: string
+        type: array
+      day_max_usd:
+        type: number
+      description:
+        type: string
+      end_time:
+        type: integer
+      global_max_usd:
+        type: number
+      per_user_max_usd:
+        type: number
+      project_code:
+        type: string
+      start_time:
+        type: integer
+      strategy_code:
+        type: string
+      strategy_name:
+        type: string
+    type: object
 info:
-  contact: {}
-paths: {}
+  contact:
+    name: AAStar BackEndDashBoard
+    url: https://aastar.xyz
+  title: AAStar BackEndDashBoard API
+  version: v1
+paths:
+  /api/healthz:
+    get:
+      consumes:
+      - application/json
+      description: Get Healthz
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Healthz
+  /api/v1/api_key:
+    delete:
+      consumes:
+      - application/json
+      description: DeleteApiKey
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: Api Key
+        in: query
+        name: api_key
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - DeleteApiKey
+    get:
+      consumes:
+      - application/json
+      description: GetApiKey
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: Api Key
+        in: query
+        name: api_key
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - GetApiKey
+    put:
+      consumes:
+      - application/json
+      description: UpdateApiKey
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: UploadApiKeyRequest Model
+        in: body
+        name: uploadApiKeyRequest
+        required: true
+        schema:
+          $ref: '#/definitions/model.UploadApiKeyRequest'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - UpdateApiKey
+  /api/v1/api_key/apply:
+    post:
+      consumes:
+      - application/json
+      description: ApplyApiKey
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: UploadApiKeyRequest Model
+        in: body
+        name: applyApiKeyRequest
+        required: true
+        schema:
+          $ref: '#/definitions/model.ApplyApiKeyRequest'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - ApplyApiKey
+  /api/v1/api_key/list:
+    get:
+      consumes:
+      - application/json
+      description: GetApiKeyList
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - GetApiKeyList
+  /api/v1/paymaster_strategy:
+    delete:
+      consumes:
+      - application/json
+      description: DeleteStrategy
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: PaymasterStrategy Code
+        in: query
+        name: strategy_code
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - DeleteStrategy
+    get:
+      consumes:
+      - application/json
+      description: GetStrategy
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: PaymasterStrategy Code
+        in: query
+        name: strategy_code
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - GetStrategy
+    post:
+      consumes:
+      - application/json
+      description: AddStrategy
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: UploadStrategyRequest Model
+        in: body
+        name: uploadStrategyRequest
+        required: true
+        schema:
+          $ref: '#/definitions/model.UploadStrategyRequest'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - AddStrategy
+    put:
+      consumes:
+      - application/json
+      description: UpdateStrategy
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: UploadStrategyRequest Model
+        in: body
+        name: uploadStrategyRequest
+        required: true
+        schema:
+          $ref: '#/definitions/model.UploadStrategyRequest'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - UpdateStrategy
+  /api/v1/paymaster_strategy/list:
+    get:
+      consumes:
+      - application/json
+      description: GetStrategyList
+      parameters:
+      - description: User ID
+        in: header
+        name: user_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - GetStrategyList
 swagger: "2.0"

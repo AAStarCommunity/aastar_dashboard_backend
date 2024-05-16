@@ -1,7 +1,399 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "title": "AAStar BackEndDashBoard API",
+        "contact": {
+            "name": "AAStar BackEndDashBoard",
+            "url": "https://aastar.xyz"
+        },
+        "version": "v1"
     },
-    "paths": {}
+    "basePath": "/api",
+    "paths": {
+        "/api/healthz": {
+            "get": {
+                "description": "Get Healthz",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Healthz"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/api_key": {
+            "get": {
+                "description": "GetApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetApiKey"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Api Key",
+                        "name": "api_key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "description": "UpdateApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UpdateApiKey"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "UploadApiKeyRequest Model",
+                        "name": "uploadApiKeyRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadApiKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "description": "DeleteApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DeleteApiKey"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Api Key",
+                        "name": "api_key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/api_key/apply": {
+            "post": {
+                "description": "ApplyApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ApplyApiKey"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "UploadApiKeyRequest Model",
+                        "name": "applyApiKeyRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ApplyApiKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/api_key/list": {
+            "get": {
+                "description": "GetApiKeyList",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetApiKeyList"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/paymaster_strategy": {
+            "get": {
+                "description": "GetStrategy",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetStrategy"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "PaymasterStrategy Code",
+                        "name": "strategy_code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "description": "UpdateStrategy",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UpdateStrategy"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "UploadStrategyRequest Model",
+                        "name": "uploadStrategyRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadStrategyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "description": "AddStrategy",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AddStrategy"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "UploadStrategyRequest Model",
+                        "name": "uploadStrategyRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UploadStrategyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "description": "DeleteStrategy",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DeleteStrategy"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "PaymasterStrategy Code",
+                        "name": "strategy_code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/paymaster_strategy/list": {
+            "get": {
+                "description": "GetStrategyList",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetStrategyList"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.ApplyApiKeyRequest": {
+            "type": "object",
+            "properties": {
+                "api_key_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UploadApiKeyRequest": {
+            "type": "object",
+            "properties": {
+                "api_key": {
+                    "type": "string"
+                },
+                "api_key_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UploadStrategyRequest": {
+            "type": "object",
+            "properties": {
+                "address_block_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "chain_id_whitelist": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "day_max_usd": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_time": {
+                    "type": "integer"
+                },
+                "global_max_usd": {
+                    "type": "number"
+                },
+                "per_user_max_usd": {
+                    "type": "number"
+                },
+                "project_code": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "integer"
+                },
+                "strategy_code": {
+                    "type": "string"
+                },
+                "strategy_name": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }
