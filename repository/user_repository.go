@@ -6,7 +6,15 @@ import (
 	"gorm.io/gorm"
 )
 
-func FindByUserId(userId string) (interface{}, error) {
+func FindUserByEmail(email string) (user *model.User, err error) {
+	user = &model.User{}
+	tx := dataBase.Where("email = ?", email).First(&user)
+	if tx.Error != nil {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			return nil, tx.Error
+		}
+		return user, tx.Error
+	}
 	return nil, nil
 }
 

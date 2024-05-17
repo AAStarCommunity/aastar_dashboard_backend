@@ -28,18 +28,14 @@ func AuthHandler() gin.HandlerFunc {
 			}
 			return jwt.MapClaims{}
 		},
-		//Authenticator: func(c *gin.Context) (interface{}, error) {
-		//	var apiKey ApiKey
-		//	if err := c.ShouldBind(&apiKey); err != nil {
-		//		return "", jwt.ErrMissingLoginValues
-		//	}
-		//
-		//	// TODO: verify if the key is correct
-		//	return apiKey.Key, nil
-		//
-		//	// if incorrect
-		//	//return nil, jwt.ErrFailedAuthentication
-		//},
+		Authenticator: func(c *gin.Context) (interface{}, error) {
+			userId := c.GetString("user_id")
+			if userId == "" {
+				return nil, jwt.ErrMissingLoginValues
+			}
+			return userId, nil
+		},
+
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			// always return true unless the permission feature started
 			return true

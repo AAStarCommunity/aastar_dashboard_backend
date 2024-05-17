@@ -1,6 +1,9 @@
 package model
 
-import "gorm.io/datatypes"
+import (
+	"aastar_dashboard_back/config"
+	"gorm.io/datatypes"
+)
 
 type User struct {
 	BaseData
@@ -15,5 +18,8 @@ type User struct {
 }
 
 func (User) TableName() string {
-	return "aastar_user"
+	if config.Environment.IsProduction() {
+		return "aastar_user_prod"
+	}
+	return "aastar_user_dev"
 }

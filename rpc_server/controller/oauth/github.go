@@ -172,32 +172,33 @@ func GithubOAuthLogin(ctx *gin.Context) {
 			ctx.JSON(http.StatusBadRequest, err)
 			return
 		} else {
-			go func() {
-				user, err := repository.FindUserByGitHubId(githubUser.Id)
-				if err != nil {
-					if !errors.Is(err, gorm.ErrRecordNotFound) {
-						ctx.JSON(http.StatusBadRequest, err)
-						return
-					}
-					//New User By GitHub
-					user.GithubId = githubUser.Id
-					user.GitHubAvatarUrl = githubUser.AvatarUrl
-					user.GitHubLogin = githubUser.Login
-					user.GitHubName = githubUser.Name
-					user.UserId = uuid.New().String()
-					err := repository.CreateUser(user)
-					if err != nil {
-						ctx.JSON(http.StatusBadRequest, err)
-						return
-					}
+
+			user, err := repository.FindUserByGitHubId(githubUser.Id)
+			if err != nil {
+				if !errors.Is(err, gorm.ErrRecordNotFound) {
+					ctx.JSON(http.StatusBadRequest, err)
+					return
 				}
-				_ = repository.UpdateUserLatestLoginTime(user)
-			}()
+				//New User By GitHub
+				user.GithubId = githubUser.Id
+				user.GitHubAvatarUrl = githubUser.AvatarUrl
+				user.GitHubLogin = githubUser.Login
+				user.GitHubName = githubUser.Name
+				user.UserId = uuid.New().String()
+				err := repository.CreateUser(user)
+				if err != nil {
+					ctx.JSON(http.StatusBadRequest, err)
+					return
+				}
+			}
+			_ = repository.UpdateUserLatestLoginTime(user)
+			ctx.Set("user_id", user.UserId)
 			middlewares.GinJwtMiddleware().LoginHandler(ctx)
 
-			// 执行以下代码，将入参调整一下
 			// https://github.com/AAStarCommunity/EthPaymaster_BackService/blob/cedeb46d0cac7dae88ba52117f6fb057e37ad217/rpc_server/api/auth.go#L17
-			// TODO: 返回JWT
 		}
 	}
+}
+func GithubOAuthBind(ctx *gin.Context) {
+
 }

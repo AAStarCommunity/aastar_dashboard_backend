@@ -122,6 +122,8 @@ func buildSwagger(router *gin.Engine) {
 // buildOAuth supports 3rd party login via OAuth
 func buildOAuth() {
 	engine.GET("/oauth/github", oauth.GithubOAuthLogin)
+	engine.GET("/oauth/email", oauth.EmailOauthLogin)
+	engine.POST("/oauth/password", oauth.PasswordOauthLogin)
 	engine.POST("/oauth/logOut", oauth.Logout)
 }
 

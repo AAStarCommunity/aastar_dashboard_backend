@@ -1,6 +1,7 @@
 package model
 
 import (
+	"aastar_dashboard_back/config"
 	"gorm.io/datatypes"
 )
 
@@ -14,5 +15,8 @@ type ApiKeyModel struct {
 }
 
 func (ApiKeyModel) TableName() string {
-	return "paymaster_api_key"
+	if config.Environment.IsProduction() {
+		return "aastar_api_key_prod"
+	}
+	return "aastar_api_key_dev"
 }
