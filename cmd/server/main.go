@@ -48,27 +48,27 @@ func getPort() string {
 func main() {
 
 	engine = gin.New()
-
-	gin.SetMode(gin.DebugMode)
-	logrus.SetLevel(logrus.DebugLevel)
+	configPath := getConfigPath()
+	config.Init(configPath)
+	buildMod(engine)
 	buildSwagger(engine)
+
+	oauth.Init()
+	repository.Init()
+	engine.GET("/api/healthz", Healthz)
+	buildOAuth()
+	buildMid()
+	buildRouter()
+	_ = engine.Run(getPort())
+}
+
+func getConfigPath() string {
 	configPath := os.Getenv("CONFIG_PATH")
 	logrus.Infof("Config Path:[%s]", configPath)
 	if configPath == "" {
 		configPath = "config/config.json"
 	}
-	config.Init(configPath)
-	logrus.Infof("Config loaded successfully Env: %s", config.Environment.Name)
-	logrus.Infof("System Config: %v", config.AllConfig())
-	dsn := config.GetDsn()
-	logrus.Infof("DSN : %s", dsn)
-	repository.Init(dsn)
-	//DB Init
-	buildMod(engine)
-	buildMid()
-	buildRouter()
-	buildOAuth()
-	_ = engine.Run(getPort())
+	return configPath
 }
 func buildMid() {
 	engine.Use(middlewares.GenericRecoveryHandler())
@@ -76,9 +76,9 @@ func buildMid() {
 		engine.Use(middlewares.LogHandler())
 	}
 	engine.Use(middlewares.CorsHandler())
+	engine.Use(middlewares.AuthHandler())
 }
 func buildRouter() {
-	engine.GET("/api/healthz", Healthz)
 
 	engine.GET("/api/v1/paymaster_strategy/list", controller.GetStrategyList)
 	engine.GET("/api/v1/paymaster_strategy", controller.GetStrategy)
@@ -99,6 +99,7 @@ func buildMod(routers *gin.Engine) {
 
 	// prod mode
 	if config.Environment.IsProduction() {
+		logrus.SetLevel(logrus.InfoLevel)
 		gin.SetMode(gin.ReleaseMode)
 		gin.DefaultWriter = io.Discard // disable gin log
 		logrus.Infof("Build Release Mode")
@@ -108,9 +109,10 @@ func buildMod(routers *gin.Engine) {
 	// dev mod
 	if config.Environment.IsDevelopment() {
 		gin.SetMode(gin.DebugMode)
-
+		logrus.SetLevel(logrus.DebugLevel)
 		return
 	}
+
 }
 func buildSwagger(router *gin.Engine) {
 	docs.SwaggerInfo.BasePath = "/"
@@ -120,6 +122,7 @@ func buildSwagger(router *gin.Engine) {
 // buildOAuth supports 3rd party login via OAuth
 func buildOAuth() {
 	engine.GET("/oauth/github", oauth.GithubOAuthLogin)
+	engine.POST("/oauth/logOut", oauth.Logout)
 }
 
 // Healthz

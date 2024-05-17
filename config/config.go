@@ -3,8 +3,8 @@ package config
 import "C"
 import (
 	"aastar_dashboard_back/model"
-	"aastar_dashboard_back/rpc_server/controller/oauth"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"os"
 
 	"github.com/spf13/viper"
@@ -13,6 +13,10 @@ import (
 var dscTemplate = "host=%s port=%s user=%s password=%s dbname=%s TimeZone=%s sslmode=%s"
 var Environment *model.Env
 var systemConfigViper *viper.Viper
+var (
+	KeyJwtSecret = "JWT.Security"
+	KeyJwtRealm  = "JWT.Realm"
+)
 
 func AllConfig() map[string]any {
 	return systemConfigViper.AllSettings()
@@ -35,10 +39,15 @@ func Init(configPath string) {
 	if err != nil {
 		panic(err)
 	}
+	logrus.Infof("Config loaded successfully Env: %s", Environment.Name)
+	logrus.Infof("System Config: %v", AllConfig())
 
-	githubClientId := systemConfigViper.GetString("OAuth.Github.ClientId")
-	githubClientSecret := systemConfigViper.GetString("OAuth.Github.ClientSecret")
-	oauth.SetGithubOAuthAppInfo(&githubClientId, &githubClientSecret)
+}
+func GetSystemConfigByKey(key string) string {
+	return systemConfigViper.GetString(key)
+}
+func GetSystemConfigInt64yKey(key string) int64 {
+	return systemConfigViper.GetInt64(key)
 }
 func GetDsn() string {
 	return fmt.Sprintf(dscTemplate,

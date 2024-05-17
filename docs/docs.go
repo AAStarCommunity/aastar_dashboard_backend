@@ -337,6 +337,31 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/oauth/github": {
+            "get": {
+                "description": "Github OAuth Login",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OAuth"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Github OAuth Code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
     },
     "definitions": {

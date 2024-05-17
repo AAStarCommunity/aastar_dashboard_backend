@@ -1,8 +1,13 @@
 package oauth
 
 import (
+	"aastar_dashboard_back/repository"
+	"aastar_dashboard_back/rpc_server/middlewares"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 	"io"
 	"net/http"
 	"strings"
@@ -148,6 +153,14 @@ func getGithubUserInfo(accessToken *githubAccessToken) (*githubUserInfo, error) 
 	return githubUserInfo, err
 }
 
+// GithubOAuthLogin
+// @Tags OAuth
+// @Description Github OAuth Login
+// @Accept json
+// @Product json
+// @Param code query string true "Github OAuth Code"
+// @Router /oauth/github [get]
+// @Success 200
 func GithubOAuthLogin(ctx *gin.Context) {
 	token := ctx.Query("code")
 
@@ -160,9 +173,27 @@ func GithubOAuthLogin(ctx *gin.Context) {
 			return
 		} else {
 			go func() {
-				// TODO: save / update user info to db
-				_ = githubUser
+				user, err := repository.FindUserByGitHubId(githubUser.Id)
+				if err != nil {
+					if !errors.Is(err, gorm.ErrRecordNotFound) {
+						ctx.JSON(http.StatusBadRequest, err)
+						return
+					}
+					//New User By GitHub
+					user.GithubId = githubUser.Id
+					user.GitHubAvatarUrl = githubUser.AvatarUrl
+					user.GitHubLogin = githubUser.Login
+					user.GitHubName = githubUser.Name
+					user.UserId = uuid.New().String()
+					err := repository.CreateUser(user)
+					if err != nil {
+						ctx.JSON(http.StatusBadRequest, err)
+						return
+					}
+				}
+				_ = repository.UpdateUserLatestLoginTime(user)
 			}()
+			middlewares.GinJwtMiddleware().LoginHandler(ctx)
 
 			// 执行以下代码，将入参调整一下
 			// https://github.com/AAStarCommunity/EthPaymaster_BackService/blob/cedeb46d0cac7dae88ba52117f6fb057e37ad217/rpc_server/api/auth.go#L17

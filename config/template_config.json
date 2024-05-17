@@ -1,0 +1,22 @@
+{
+  "DB": {
+    "host": "localhost",
+    "port": 5433,
+    "user": "x",
+    "password": "",
+    "db_name": "",
+    "tz": "",
+    "ssl_mode": ""
+  },
+  "OAuth": {
+    "Github": {
+      "ClientId": "",
+      "ClientSecret": ""
+    }
+  },
+  "JWT": {
+    "Security" :"",
+    "Realm": ""
+    "ExpireTime": "",
+  }
+}

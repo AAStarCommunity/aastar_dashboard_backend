@@ -257,4 +257,20 @@ paths:
           description: OK
       tags:
       - GetStrategyList
+  /oauth/github:
+    get:
+      consumes:
+      - application/json
+      description: Github OAuth Login
+      parameters:
+      - description: Github OAuth Code
+        in: query
+        name: code
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      tags:
+      - OAuth
 swagger: "2.0"
