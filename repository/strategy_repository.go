@@ -9,7 +9,7 @@ import (
 
 func SelectListByUserId(userId string) (strategies []model.PaymasterStrategy, err error) {
 	strategies = make([]model.PaymasterStrategy, 0)
-	tx := dataBase.Model(&model.PaymasterStrategy{}).Where("user_id = ?", userId).Find(&strategies)
+	tx := dataBase.Model(&model.PaymasterStrategy{}).Where("user_id = ?", userId).Where("deleted_at IS NULL").Find(&strategies)
 	if tx.Error != nil {
 		return strategies, xerrors.Errorf("error when finding strategies: %w", tx.Error)
 	}
@@ -26,7 +26,7 @@ func DeleteByStrategyCode(strategyCode string) (err error) {
 }
 func FindByStrategyCode(strategyCode string) (strategy *model.PaymasterStrategy, err error) {
 	strategy = &model.PaymasterStrategy{}
-	tx := dataBase.Where("strategy_code = ?", strategyCode).First(strategy)
+	tx := dataBase.Where("strategy_code = ?", strategyCode).Where("deleted_at IS NULL").First(strategy)
 	if tx.Error != nil {
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 			return nil, xerrors.Errorf("Can Not Find strategyCode %s", strategyCode)
