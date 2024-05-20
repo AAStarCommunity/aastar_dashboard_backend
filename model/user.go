@@ -5,6 +5,8 @@ import (
 	"gorm.io/datatypes"
 )
 
+// User model
+// UserId Is Unique Id
 type User struct {
 	BaseData
 	UserId          string         `gorm:"column:user_id;type:varchar(255)" json:"user_id"`
