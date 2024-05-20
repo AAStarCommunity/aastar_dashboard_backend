@@ -67,12 +67,13 @@ func AddStrategy(ctx *gin.Context) {
 		response.FailCode(ctx, 400, "user_id is required")
 		return
 	}
-	prefixLen := 10
+	prefixLen := 5
 	if len(userId) < prefixLen {
 		prefixLen = len(userId)
 	}
-
-	strategy.StrategyCode = strategy.StrategyName + "_" + userId[prefixLen:] + "_" + util.GenerateRandomString(10)
+	if strategy.StrategyCode == "" {
+		strategy.StrategyCode = strategy.StrategyName + "_" + userId[prefixLen:] + "_" + util.GenerateRandomString(5)
+	}
 	strategy.UserId = userId
 	err = repository.CreateStrategy(&strategy)
 	if err != nil {
