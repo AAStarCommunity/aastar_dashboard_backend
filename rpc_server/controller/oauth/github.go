@@ -167,50 +167,59 @@ func getGithubUserInfo(accessToken *githubAccessToken) (*githubUserInfo, error) 
 // @Success 200
 func GithubOAuthLogin(ctx *gin.Context) {
 	token := ctx.Query("code")
-
-	if accessToken, err := getGithubAccessToken(token); err != nil {
+	accessToken, err := getGithubAccessToken(token)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
-	} else {
-		if githubUser, err := getGithubUserInfo(accessToken); err != nil {
+	}
+	if accessToken == nil {
+		ctx.JSON(http.StatusBadRequest, "Get Github Access Token Failed accessToken is Empty")
+		return
+	}
+	githubUser, err := getGithubUserInfo(accessToken)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+	if githubUser == nil {
+		ctx.JSON(http.StatusBadRequest, "Get Github User Info Failed githubUser is Empty")
+		return
+	}
+
+	user, err := repository.FindUserByGitHubId(githubUser.Id)
+	if err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			ctx.JSON(http.StatusBadRequest, err)
 			return
-		} else {
-			user, err := repository.FindUserByGitHubId(githubUser.Id)
-			if err != nil {
-				if !errors.Is(err, gorm.ErrRecordNotFound) {
-					ctx.JSON(http.StatusBadRequest, err)
-					return
-				}
-				user = &model.User{}
-				//New User By GitHub
-				user.GithubId = githubUser.Id
-				user.GithubAvatarUrl = githubUser.AvatarUrl
-				user.GithubLogin = githubUser.Login
-				user.GithubName = githubUser.Name
-				user.Email = githubUser.Email
-				user.UserId = uuid.New().String()
-				err := repository.CreateUser(user)
-				if err != nil {
-					ctx.JSON(http.StatusBadRequest, err)
-					return
-				}
-			} else {
-				if user.GithubName != githubUser.Name {
-					user.GithubName = githubUser.Name
-				}
-				if user.GithubAvatarUrl != githubUser.AvatarUrl {
-					user.GithubAvatarUrl = githubUser.AvatarUrl
-				}
-			}
-
-			_ = repository.UpdateUserLatestLoginTime(user)
-			ctx.Set("user_id", user.UserId)
-			middlewares.GinJwtMiddleware().LoginHandler(ctx)
-
-			// https://github.com/AAStarCommunity/EthPaymaster_BackService/blob/cedeb46d0cac7dae88ba52117f6fb057e37ad217/rpc_server/api/auth.go#L17
+		}
+		user = &model.User{}
+		//New User By GitHub
+		user.GithubId = githubUser.Id
+		user.GithubAvatarUrl = githubUser.AvatarUrl
+		user.GithubLogin = githubUser.Login
+		user.GithubName = githubUser.Name
+		user.Email = githubUser.Email
+		user.UserId = uuid.New().String()
+		err := repository.CreateUser(user)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, err)
+			return
+		}
+	} else {
+		if user.GithubName != githubUser.Name {
+			user.GithubName = githubUser.Name
+		}
+		if user.GithubAvatarUrl != githubUser.AvatarUrl {
+			user.GithubAvatarUrl = githubUser.AvatarUrl
 		}
 	}
+
+	_ = repository.UpdateUserLatestLoginTime(user)
+	ctx.Set("user_id", user.UserId)
+	middlewares.GinJwtMiddleware().LoginHandler(ctx)
+
+	// https://github.com/AAStarCommunity/EthPaymaster_BackService/blob/cedeb46d0cac7dae88ba52117f6fb057e37ad217/rpc_server/api/auth.go#L17
+
 }
 func GithubOAuthBind(ctx *gin.Context) {
 
