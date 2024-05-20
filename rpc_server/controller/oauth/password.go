@@ -40,7 +40,8 @@ func PasswordOauthLogin(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"error": "Password not correct"})
 		return
 	}
-	ctx.Set("user_id", "dylan")
+
+	ctx.Set("user_id", user.UserId)
 	middlewares.GinJwtMiddleware().LoginHandler(ctx)
 }
 
