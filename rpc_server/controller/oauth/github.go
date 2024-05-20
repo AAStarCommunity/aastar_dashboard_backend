@@ -1,12 +1,14 @@
 package oauth
 
 import (
+	"aastar_dashboard_back/model"
 	"aastar_dashboard_back/repository"
 	"aastar_dashboard_back/rpc_server/middlewares"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"io"
 	"net/http"
@@ -73,6 +75,7 @@ type githubUserInfo struct {
 	AvatarUrl string `json:"avatar_url"`
 	Url       string `json:"url"`
 	Name      string `json:"name"`
+	Email     string `json:"email"`
 }
 
 func getGithubAccessToken(token string) (*githubAccessToken, error) {
@@ -149,6 +152,7 @@ func getGithubUserInfo(accessToken *githubAccessToken) (*githubUserInfo, error) 
 	}
 
 	githubUserInfo := &githubUserInfo{}
+	logrus.Debug("GithubUserInfo:", string(responseBody))
 	err = json.Unmarshal(responseBody, githubUserInfo)
 	return githubUserInfo, err
 }
@@ -172,18 +176,19 @@ func GithubOAuthLogin(ctx *gin.Context) {
 			ctx.JSON(http.StatusBadRequest, err)
 			return
 		} else {
-
 			user, err := repository.FindUserByGitHubId(githubUser.Id)
 			if err != nil {
 				if !errors.Is(err, gorm.ErrRecordNotFound) {
 					ctx.JSON(http.StatusBadRequest, err)
 					return
 				}
+				user = &model.User{}
 				//New User By GitHub
 				user.GithubId = githubUser.Id
 				user.GitHubAvatarUrl = githubUser.AvatarUrl
 				user.GitHubLogin = githubUser.Login
 				user.GitHubName = githubUser.Name
+				user.Email = githubUser.Email
 				user.UserId = uuid.New().String()
 				err := repository.CreateUser(user)
 				if err != nil {

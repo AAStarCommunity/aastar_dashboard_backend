@@ -18,6 +18,18 @@ func FindUserByEmail(email string) (user *model.User, err error) {
 	return nil, nil
 }
 
+func FindUserByUserId(userId string) (user *model.User, err error) {
+	user = &model.User{}
+	tx := dataBase.Where("user_id = ?", userId).First(&user)
+	if tx.Error != nil {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			return nil, tx.Error
+		}
+		return user, tx.Error
+	}
+	return nil, nil
+}
+
 func FindUserByGitHubId(githubId int) (user *model.User, err error) {
 	user = &model.User{}
 	tx := dataBase.Where("github_id = ?", githubId).First(&user)

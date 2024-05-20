@@ -3,6 +3,7 @@ package main
 import (
 	"aastar_dashboard_back/config"
 	"aastar_dashboard_back/docs"
+	"aastar_dashboard_back/env"
 	"aastar_dashboard_back/repository"
 	"aastar_dashboard_back/rpc_server/controller"
 	"aastar_dashboard_back/rpc_server/controller/oauth"
@@ -45,11 +46,17 @@ func getPort() string {
 // @BasePath /api
 // @title AAStar BackEndDashBoard API
 // @version v1
+// @securityDefinitions.apikey JWT
+// @in header
+// @name Authorization
+// @description Type 'Bearer \<TOKEN\>' to correctly set the AccessToken
+// @BasePath /api
 func main() {
 
 	engine = gin.New()
 	configPath := getConfigPath()
 	config.Init(configPath)
+	env.Init()
 	buildMod(engine)
 	buildSwagger(engine)
 
@@ -72,7 +79,7 @@ func getConfigPath() string {
 }
 func buildMid() {
 	engine.Use(middlewares.GenericRecoveryHandler())
-	if config.Environment.IsDevelopment() {
+	if env.Environment.IsDevelopment() {
 		engine.Use(middlewares.LogHandler())
 	}
 	engine.Use(middlewares.CorsHandler())
@@ -92,13 +99,15 @@ func buildRouter() {
 	engine.DELETE("/api/v1/api_key", controller.DeleteApiKey)
 	engine.POST("/api/v1/api_key/apply", controller.ApplyApiKey)
 
+	engine.GET("/api/v1/user", controller.GetUserInfo)
+
 }
 
 // buildMod set Mode by Environment
 func buildMod(routers *gin.Engine) {
 
 	// prod mode
-	if config.Environment.IsProduction() {
+	if env.Environment.IsProduction() {
 		logrus.SetLevel(logrus.InfoLevel)
 		gin.SetMode(gin.ReleaseMode)
 		gin.DefaultWriter = io.Discard // disable gin log
@@ -107,7 +116,7 @@ func buildMod(routers *gin.Engine) {
 	}
 
 	// dev mod
-	if config.Environment.IsDevelopment() {
+	if env.Environment.IsDevelopment() {
 		gin.SetMode(gin.DebugMode)
 		logrus.SetLevel(logrus.DebugLevel)
 		return

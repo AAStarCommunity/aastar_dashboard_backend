@@ -1,7 +1,7 @@
 package model
 
 import (
-	"aastar_dashboard_back/config"
+	"aastar_dashboard_back/env"
 	"aastar_dashboard_back/global_const"
 	"gorm.io/datatypes"
 	"math/big"
@@ -20,7 +20,7 @@ type PaymasterStrategy struct {
 }
 
 func (PaymasterStrategy) TableName() string {
-	if config.Environment.IsProduction() {
+	if env.Environment.IsProduction() {
 		return "aastar_strategy_prod"
 	}
 	return "aastar_strategy_dev"

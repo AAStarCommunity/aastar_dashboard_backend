@@ -1,13 +1,14 @@
 package model
 
 import (
-	"aastar_dashboard_back/config"
+	"aastar_dashboard_back/env"
 	"gorm.io/datatypes"
 )
 
 type ApiKeyModel struct {
 	BaseData
 	ProjectCode string         `gorm:"column:project_code;type:varchar(50)" json:"project_code"`
+	Disable     bool           `gorm:"column:disable;type:bool" json:"disable"`
 	UserId      string         `gorm:"column:user_id;type:varchar(255)" json:"user_id"`
 	ApiKey      string         `gorm:"column:api_key;type:varchar(255)" json:"api_key"`
 	KeyName     string         `gorm:"column:key_name;type:varchar(255)" json:"key_name"`
@@ -15,7 +16,7 @@ type ApiKeyModel struct {
 }
 
 func (ApiKeyModel) TableName() string {
-	if config.Environment.IsProduction() {
+	if env.Environment.IsProduction() {
 		return "aastar_api_key_prod"
 	}
 	return "aastar_api_key_dev"

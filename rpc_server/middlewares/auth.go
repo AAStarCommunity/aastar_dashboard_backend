@@ -15,15 +15,19 @@ func GinJwtMiddleware() *jwt.GinJWTMiddleware {
 
 func AuthHandler() gin.HandlerFunc {
 	m, _ := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:       config.GetSystemConfigByKey(config.KeyJwtRealm),
-		Key:         []byte(config.GetSystemConfigByKey(config.KeyJwtSecret)),
-		Timeout:     time.Hour * 48,
-		MaxRefresh:  time.Hour / 2,
-		IdentityKey: "jti",
+		Realm:      config.GetSystemConfigByKey(config.KeyJwtRealm),
+		Key:        []byte(config.GetSystemConfigByKey(config.KeyJwtSecret)),
+		Timeout:    time.Hour * 48,
+		MaxRefresh: time.Hour / 2,
+		IdentityHandler: func(c *gin.Context) interface{} {
+			payload := jwt.ExtractClaims(c)
+			return payload["user_id"]
+		},
+		IdentityKey: "user_id",
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(string); ok {
 				return jwt.MapClaims{
-					"jti": v,
+					"user_id": v,
 				}
 			}
 			return jwt.MapClaims{}

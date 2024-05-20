@@ -13,14 +13,20 @@ type PasswordRequest struct {
 	Password string `json:"password"`
 }
 
+// PasswordOauthLogin
+// @Tags Oauth
+// @Description PasswordOauthLogin
+// @Accept json
+// @Product json
+// @Param passwordRequest body PasswordRequest true "PasswordRequest Model"
+// @Router /oauth/password [post]
+// @Success 200
 func PasswordOauthLogin(ctx *gin.Context) {
-
 	var req PasswordRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	// Get User By Email
 	user, err := repository.FindUserByEmail(req.Email)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -34,7 +40,7 @@ func PasswordOauthLogin(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"error": "Password not correct"})
 		return
 	}
-	ctx.Set("user_id", user.UserId)
+	ctx.Set("user_id", "dylan")
 	middlewares.GinJwtMiddleware().LoginHandler(ctx)
 }
 

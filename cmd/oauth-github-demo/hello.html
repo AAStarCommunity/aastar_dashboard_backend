@@ -16,7 +16,7 @@
   const client_id = 'Ov23liCidwh930tyfn7e';
 
   const authorize_uri = 'https://github.com/login/oauth/authorize';
-  const redirect_uri = 'http://localhost:8080/oauth/github';
+  const redirect_uri = 'http://localhost:80/oauth/github';
 
   const link = document.getElementById('login');
   link.href = `${authorize_uri}?client_id=${client_id}&redirect_uri=${redirect_uri}`;
