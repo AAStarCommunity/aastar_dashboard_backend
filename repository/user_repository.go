@@ -15,7 +15,7 @@ func FindUserByEmail(email string) (user *model.User, err error) {
 		}
 		return user, tx.Error
 	}
-	return nil, nil
+	return user, nil
 }
 
 func FindUserByUserId(userId string) (user *model.User, err error) {
@@ -27,7 +27,7 @@ func FindUserByUserId(userId string) (user *model.User, err error) {
 		}
 		return user, tx.Error
 	}
-	return nil, nil
+	return user, nil
 }
 
 func FindUserByGitHubId(githubId int) (user *model.User, err error) {
@@ -39,7 +39,7 @@ func FindUserByGitHubId(githubId int) (user *model.User, err error) {
 		}
 		return user, tx.Error
 	}
-	return nil, nil
+	return user, nil
 }
 func UpdateUserLatestLoginTime(user *model.User) error {
 	return nil
