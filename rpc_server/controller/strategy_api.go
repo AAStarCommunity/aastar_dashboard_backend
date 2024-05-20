@@ -26,7 +26,7 @@ func GetStrategy(ctx *gin.Context) {
 		response.FailCode(ctx, 400, "strategy_code is required")
 		return
 	}
-	userId := ctx.GetString("jti")
+	userId := ctx.GetString("user_id")
 	if userId == "" {
 		response.FailCode(ctx, 400, "user_id is required")
 		return
