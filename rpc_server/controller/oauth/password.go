@@ -37,7 +37,7 @@ func PasswordOauthLogin(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	if user.PassWord != req.Password {
+	if user.Password != req.Password {
 		ctx.JSON(400, gin.H{"error": "Password not correct"})
 		return
 	}

@@ -10,7 +10,7 @@ import (
 type User struct {
 	BaseData
 	Email           string         `gorm:"column:email;type:varchar(255)" json:"email"`
-	PassWord        string         `gorm:"column:password;type:varchar(255)" json:"password"`
+	Password        string         `gorm:"column:password;type:varchar(255)" json:"password"`
 	GithubId        int            `gorm:"column:github_id;type:int" json:"github_id"`
 	GithubAvatarUrl string         `gorm:"column:github_avatar_url;type:varchar(255)" json:"github_avatar_url"`
 	GithubName      string         `gorm:"column:github_name;type:varchar(255)" json:"github_name"`
