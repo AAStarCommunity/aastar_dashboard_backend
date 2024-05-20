@@ -21,6 +21,7 @@ func GetUserInfo(ctx *gin.Context) {
 		response.FailCode(ctx, 400, "user_id is required")
 		return
 	}
+
 	user, err := repository.FindUserByUserId(userId)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())

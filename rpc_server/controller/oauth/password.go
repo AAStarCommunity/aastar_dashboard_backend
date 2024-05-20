@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 type PasswordRequest struct {
@@ -41,7 +42,7 @@ func PasswordOauthLogin(ctx *gin.Context) {
 		return
 	}
 
-	ctx.Set("user_id", user.UserId)
+	ctx.Set("user_id", strconv.FormatInt(user.ID, 10))
 	middlewares.GinJwtMiddleware().LoginHandler(ctx)
 }
 

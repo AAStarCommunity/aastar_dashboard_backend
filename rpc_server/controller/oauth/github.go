@@ -7,11 +7,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -199,7 +199,6 @@ func GithubOAuthLogin(ctx *gin.Context) {
 		user.GithubLogin = githubUser.Login
 		user.GithubName = githubUser.Name
 		user.Email = githubUser.Email
-		user.UserId = uuid.New().String()
 		err := repository.CreateUser(user)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, err)
@@ -215,7 +214,7 @@ func GithubOAuthLogin(ctx *gin.Context) {
 	}
 
 	_ = repository.UpdateUserLatestLoginTime(user)
-	ctx.Set("user_id", user.UserId)
+	ctx.Set("user_id", strconv.FormatInt(user.ID, 10))
 	middlewares.GinJwtMiddleware().LoginHandler(ctx)
 
 	// https://github.com/AAStarCommunity/EthPaymaster_BackService/blob/cedeb46d0cac7dae88ba52117f6fb057e37ad217/rpc_server/api/auth.go#L17

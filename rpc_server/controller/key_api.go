@@ -5,6 +5,7 @@ import (
 	"aastar_dashboard_back/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"strconv"
 )
 
 // GetApiKeyList
@@ -79,7 +80,11 @@ func UpdateApiKey(ctx *gin.Context) {
 	}
 
 	apikey, err := convertUploadRequestToApiKey(request)
-	apikey.UserId = userId
+	if err != nil {
+		response.FailCode(ctx, 400, err.Error())
+		return
+	}
+	apikey.UserId, err = strconv.ParseInt(userId, 10, 64)
 	if err != nil {
 		response.FailCode(ctx, 400, err.Error())
 		return
@@ -114,8 +119,13 @@ func ApplyApiKey(ctx *gin.Context) {
 		response.FailCode(ctx, 400, "user_id is required")
 		return
 	}
+	userIDInt, err := strconv.ParseInt(userId, 10, 64)
+	if err != nil {
+		response.FailCode(ctx, 400, err.Error())
+		return
+	}
 	apiKeyModule := model.ApiKeyModel{
-		UserId:  userId,
+		UserId:  userIDInt,
 		KeyName: request.ApiKeyName,
 	}
 	apiKeySecret := uuid.New().String()

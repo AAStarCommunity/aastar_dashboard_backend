@@ -9,7 +9,6 @@ import (
 // UserId Is Unique Id
 type User struct {
 	BaseData
-	UserId          string         `gorm:"column:user_id;type:varchar(255)" json:"user_id"`
 	Email           string         `gorm:"column:email;type:varchar(255)" json:"email"`
 	PassWord        string         `gorm:"column:password;type:varchar(255)" json:"password"`
 	GithubId        int            `gorm:"column:github_id;type:int" json:"github_id"`

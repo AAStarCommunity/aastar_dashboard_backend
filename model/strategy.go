@@ -13,7 +13,7 @@ type PaymasterStrategy struct {
 	StrategyCode       string                      `gorm:"type:varchar(255)" json:"strategy_code"`
 	ProjectCode        string                      `gorm:"type:varchar(255)" json:"project_code"`
 	StrategyName       string                      `gorm:"type:varchar(255)" json:"strategy_name"`
-	UserId             string                      `gorm:"type:varchar(255)" json:"user_id"`
+	UserId             int64                       `gorm:"type:integer" json:"user_id"`
 	Status             global_const.StrategyStatus `gorm:"type:varchar(20)" json:"status"`
 	ExecuteRestriction datatypes.JSON              `gorm:"type:json" json:"execute_restriction"`
 	Extra              datatypes.JSON              `gorm:"type:json" json:"extra"`

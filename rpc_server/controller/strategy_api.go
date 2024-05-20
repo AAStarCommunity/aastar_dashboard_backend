@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/xerrors"
+	"strconv"
 )
 
 // GetStrategy
@@ -74,7 +75,11 @@ func AddStrategy(ctx *gin.Context) {
 	if strategy.StrategyCode == "" {
 		strategy.StrategyCode = strategy.StrategyName + "_" + userId[prefixLen:] + "_" + util.GenerateRandomString(5)
 	}
-	strategy.UserId = userId
+	strategy.UserId, err = strconv.ParseInt(userId, 10, 64)
+	if err != nil {
+		response.FailCode(ctx, 400, err.Error())
+		return
+	}
 	err = repository.CreateStrategy(&strategy)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
@@ -110,7 +115,11 @@ func UpdateStrategy(ctx *gin.Context) {
 		response.FailCode(ctx, 400, "user_id is required")
 		return
 	}
-	strategy.UserId = userId
+	strategy.UserId, err = strconv.ParseInt(userId, 10, 64)
+	if err != nil {
+		response.FailCode(ctx, 400, err.Error())
+		return
+	}
 	err = repository.UpdateStrategy(&strategy)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
