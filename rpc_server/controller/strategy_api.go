@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/xerrors"
+	"strconv"
 )
 
 // GetStrategy
@@ -15,15 +16,20 @@ import (
 // @Description GetStrategy
 // @Accept json
 // @Product json
-// @Param user_id header string true "User ID"
 // @Param strategy_code query string true "PaymasterStrategy Code"
 // @Router /api/v1/paymaster_strategy  [get]
 // @Success 200
+// @Security JWT
 func GetStrategy(ctx *gin.Context) {
 	strategyCode := ctx.Query("strategy_code")
 	response := model.GetResponse()
 	if strategyCode == "" {
 		response.FailCode(ctx, 400, "strategy_code is required")
+		return
+	}
+	userId := ctx.GetString("user_id")
+	if userId == "" {
+		response.FailCode(ctx, 400, "user_id is required")
 		return
 	}
 	strategy, err := repository.FindByStrategyCode(strategyCode)
@@ -40,10 +46,10 @@ func GetStrategy(ctx *gin.Context) {
 // @Description AddStrategy
 // @Accept json
 // @Product json
-// @Param user_id header string true "User ID"
 // @Param uploadStrategyRequest  body  model.UploadStrategyRequest true "UploadStrategyRequest Model"
 // @Router /api/v1/paymaster_strategy  [post]
 // @Success 200
+// @Security JWT
 func AddStrategy(ctx *gin.Context) {
 	request := model.UploadStrategyRequest{}
 	err := ctx.ShouldBindJSON(&request)
@@ -57,14 +63,23 @@ func AddStrategy(ctx *gin.Context) {
 		response.FailCode(ctx, 400, err.Error())
 		return
 	}
-	userId := ctx.GetHeader("user_id")
-	prefixLen := 10
+	userId := ctx.GetString("user_id")
+	if userId == "" {
+		response.FailCode(ctx, 400, "user_id is required")
+		return
+	}
+	prefixLen := 5
 	if len(userId) < prefixLen {
 		prefixLen = len(userId)
 	}
-
-	strategy.StrategyCode = strategy.StrategyName + "_" + userId[prefixLen:] + "_" + util.GenerateRandomString(10)
-	strategy.UserId = ctx.GetHeader("user_id")
+	if strategy.StrategyCode == "" {
+		strategy.StrategyCode = strategy.StrategyName + "_" + userId[prefixLen:] + "_" + util.GenerateRandomString(5)
+	}
+	strategy.UserId, err = strconv.ParseInt(userId, 10, 64)
+	if err != nil {
+		response.FailCode(ctx, 400, err.Error())
+		return
+	}
 	err = repository.CreateStrategy(&strategy)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
@@ -78,10 +93,10 @@ func AddStrategy(ctx *gin.Context) {
 // @Description UpdateStrategy
 // @Accept json
 // @Product json
-// @Param user_id header string true "User ID"
 // @Param uploadStrategyRequest  body  model.UploadStrategyRequest true "UploadStrategyRequest Model"
 // @Router /api/v1/paymaster_strategy  [put]
 // @Success 200
+// @Security JWT
 func UpdateStrategy(ctx *gin.Context) {
 	response := model.GetResponse()
 	request := model.UploadStrategyRequest{}
@@ -95,7 +110,16 @@ func UpdateStrategy(ctx *gin.Context) {
 		response.FailCode(ctx, 400, err.Error())
 		return
 	}
-	strategy.UserId = ctx.GetHeader("user_id")
+	userId := ctx.GetString("user_id")
+	if userId == "" {
+		response.FailCode(ctx, 400, "user_id is required")
+		return
+	}
+	strategy.UserId, err = strconv.ParseInt(userId, 10, 64)
+	if err != nil {
+		response.FailCode(ctx, 400, err.Error())
+		return
+	}
 	err = repository.UpdateStrategy(&strategy)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
@@ -109,10 +133,10 @@ func UpdateStrategy(ctx *gin.Context) {
 // @Description DeleteStrategy
 // @Accept json
 // @Product json
-// @Param user_id header string true "User ID"
 // @Param strategy_code query string true "PaymasterStrategy Code"
 // @Router /api/v1/paymaster_strategy  [delete]
 // @Success 200
+// @Security JWT
 func DeleteStrategy(ctx *gin.Context) {
 	response := model.GetResponse()
 	strategyCode := ctx.Query("strategy_code")
@@ -133,15 +157,14 @@ func DeleteStrategy(ctx *gin.Context) {
 // @Description GetStrategyList
 // @Accept json
 // @Product json
-// @Param user_id header string true "User ID"
 // @Router /api/v1/paymaster_strategy/list [get]
 // @Success 200
+// @Security JWT
 func GetStrategyList(ctx *gin.Context) {
 	response := model.GetResponse()
 
-	userId := ctx.GetHeader("user_id")
+	userId := ctx.GetString("user_id")
 	if userId == "" {
-		response := model.GetResponse()
 		response.FailCode(ctx, 400, "user_id is required")
 		return
 	}

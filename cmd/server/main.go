@@ -3,21 +3,24 @@ package main
 import (
 	"aastar_dashboard_back/config"
 	"aastar_dashboard_back/docs"
+	"aastar_dashboard_back/env"
 	"aastar_dashboard_back/repository"
 	"aastar_dashboard_back/rpc_server/controller"
+	"aastar_dashboard_back/rpc_server/controller/oauth"
 	"aastar_dashboard_back/rpc_server/middlewares"
 	"flag"
-	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	"io"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-var Engine *gin.Engine
+var engine *gin.Engine
 var aPort = flag.String("port", "", "Port")
 
 func getPort() string {
@@ -43,51 +46,60 @@ func getPort() string {
 // @BasePath /api
 // @title AAStar BackEndDashBoard API
 // @version v1
+// @securityDefinitions.apikey JWT
+// @in header
+// @name Authorization
+// @description Type 'Bearer \<TOKEN\>' to correctly set the AccessToken
+// @BasePath /api
 func main() {
 
-	Engine = gin.New()
+	engine = gin.New()
+	configPath := getConfigPath()
+	config.Init(configPath)
+	env.Init()
+	buildMod(engine)
+	buildSwagger(engine)
 
-	gin.SetMode(gin.DebugMode)
-	logrus.SetLevel(logrus.DebugLevel)
-	buildSwagger(Engine)
+	oauth.Init()
+	repository.Init()
+	engine.GET("/api/healthz", Healthz)
+	buildOAuth()
+	buildMid()
+	buildRouter()
+	_ = engine.Run(getPort())
+}
+
+func getConfigPath() string {
 	configPath := os.Getenv("CONFIG_PATH")
 	logrus.Infof("Config Path:[%s]", configPath)
 	if configPath == "" {
 		configPath = "config/config.json"
 	}
-	config.Init(configPath)
-	logrus.Infof("Config loaded successfully Env: %s", config.Environment.Name)
-	logrus.Infof("System Config: %v", config.SystemConfigViper.AllSettings())
-	dsn := config.GetDsn()
-	logrus.Infof("DSN : %s", dsn)
-	repository.Init(dsn)
-	//DB Init
-	buildMod(Engine)
-	buildMid()
-	buildRouter()
-	_ = Engine.Run(getPort())
+	return configPath
 }
 func buildMid() {
-	Engine.Use(middlewares.GenericRecoveryHandler())
-	if config.Environment.IsDevelopment() {
-		Engine.Use(middlewares.LogHandler())
+	engine.Use(middlewares.GenericRecoveryHandler())
+	if env.Environment.IsDevelopment() {
+		engine.Use(middlewares.LogHandler())
 	}
-	Engine.Use(middlewares.CorsHandler())
+	engine.Use(middlewares.CorsHandler())
+	engine.Use(middlewares.AuthHandler())
 }
 func buildRouter() {
-	Engine.GET("/api/healthz", Healthz)
 
-	Engine.GET("/api/v1/paymaster_strategy/list", controller.GetStrategyList)
-	Engine.GET("/api/v1/paymaster_strategy", controller.GetStrategy)
-	Engine.PUT("/api/v1/paymaster_strategy", controller.UpdateStrategy)
-	Engine.POST("/api/v1/paymaster_strategy", controller.AddStrategy)
-	Engine.DELETE("/api/v1/paymaster_strategy", controller.DeleteStrategy)
+	engine.GET("/api/v1/paymaster_strategy/list", controller.GetStrategyList)
+	engine.GET("/api/v1/paymaster_strategy", controller.GetStrategy)
+	engine.PUT("/api/v1/paymaster_strategy", controller.UpdateStrategy)
+	engine.POST("/api/v1/paymaster_strategy", controller.AddStrategy)
+	engine.DELETE("/api/v1/paymaster_strategy", controller.DeleteStrategy)
 
-	Engine.GET("/api/v1/api_key/list", controller.GetApiKeyList)
-	Engine.GET("/api/v1/api_key", controller.GetApiKey)
-	Engine.PUT("/api/v1/api_key", controller.UpdateApiKey)
-	Engine.DELETE("/api/v1/api_key", controller.DeleteApiKey)
-	Engine.POST("/api/v1/api_key/apply", controller.ApplyApiKey)
+	engine.GET("/api/v1/api_key/list", controller.GetApiKeyList)
+	engine.GET("/api/v1/api_key", controller.GetApiKey)
+	engine.PUT("/api/v1/api_key", controller.UpdateApiKey)
+	engine.DELETE("/api/v1/api_key", controller.DeleteApiKey)
+	engine.POST("/api/v1/api_key/apply", controller.ApplyApiKey)
+
+	engine.GET("/api/v1/user", controller.GetUserInfo)
 
 }
 
@@ -95,7 +107,8 @@ func buildRouter() {
 func buildMod(routers *gin.Engine) {
 
 	// prod mode
-	if config.Environment.IsProduction() {
+	if env.Environment.IsProduction() {
+		logrus.SetLevel(logrus.InfoLevel)
 		gin.SetMode(gin.ReleaseMode)
 		gin.DefaultWriter = io.Discard // disable gin log
 		logrus.Infof("Build Release Mode")
@@ -103,15 +116,24 @@ func buildMod(routers *gin.Engine) {
 	}
 
 	// dev mod
-	if config.Environment.IsDevelopment() {
+	if env.Environment.IsDevelopment() {
 		gin.SetMode(gin.DebugMode)
-
+		logrus.SetLevel(logrus.DebugLevel)
 		return
 	}
+
 }
 func buildSwagger(router *gin.Engine) {
 	docs.SwaggerInfo.BasePath = "/"
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+}
+
+// buildOAuth supports 3rd party login via OAuth
+func buildOAuth() {
+	engine.GET("/oauth/github", oauth.GithubOAuthLogin)
+	engine.GET("/oauth/email", oauth.EmailOauthLogin)
+	engine.POST("/oauth/password", oauth.PasswordOauthLogin)
+	engine.POST("/oauth/logOut", oauth.Logout)
 }
 
 // Healthz

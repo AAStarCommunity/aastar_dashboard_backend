@@ -36,6 +36,11 @@ const docTemplate = `{
         },
         "/api/v1/api_key": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "GetApiKey",
                 "consumes": [
                     "application/json"
@@ -44,13 +49,6 @@ const docTemplate = `{
                     "GetApiKey"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "Api Key",
@@ -66,6 +64,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "UpdateApiKey",
                 "consumes": [
                     "application/json"
@@ -74,13 +77,6 @@ const docTemplate = `{
                     "UpdateApiKey"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "UploadApiKeyRequest Model",
                         "name": "uploadApiKeyRequest",
@@ -98,6 +94,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "DeleteApiKey",
                 "consumes": [
                     "application/json"
@@ -106,13 +107,6 @@ const docTemplate = `{
                     "DeleteApiKey"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "Api Key",
@@ -130,6 +124,11 @@ const docTemplate = `{
         },
         "/api/v1/api_key/apply": {
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "ApplyApiKey",
                 "consumes": [
                     "application/json"
@@ -138,13 +137,6 @@ const docTemplate = `{
                     "ApplyApiKey"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "UploadApiKeyRequest Model",
                         "name": "applyApiKeyRequest",
@@ -164,21 +156,17 @@ const docTemplate = `{
         },
         "/api/v1/api_key/list": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "GetApiKeyList",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "GetApiKeyList"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    }
                 ],
                 "responses": {
                     "200": {
@@ -189,6 +177,11 @@ const docTemplate = `{
         },
         "/api/v1/paymaster_strategy": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "GetStrategy",
                 "consumes": [
                     "application/json"
@@ -197,13 +190,6 @@ const docTemplate = `{
                     "GetStrategy"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "PaymasterStrategy Code",
@@ -219,6 +205,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "UpdateStrategy",
                 "consumes": [
                     "application/json"
@@ -227,13 +218,6 @@ const docTemplate = `{
                     "UpdateStrategy"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "UploadStrategyRequest Model",
                         "name": "uploadStrategyRequest",
@@ -251,6 +235,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "AddStrategy",
                 "consumes": [
                     "application/json"
@@ -259,13 +248,6 @@ const docTemplate = `{
                     "AddStrategy"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "description": "UploadStrategyRequest Model",
                         "name": "uploadStrategyRequest",
@@ -283,6 +265,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "DeleteStrategy",
                 "consumes": [
                     "application/json"
@@ -291,13 +278,6 @@ const docTemplate = `{
                     "DeleteStrategy"
                 ],
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "PaymasterStrategy Code",
@@ -315,6 +295,11 @@ const docTemplate = `{
         },
         "/api/v1/paymaster_strategy/list": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "GetStrategyList",
                 "consumes": [
                     "application/json"
@@ -322,13 +307,77 @@ const docTemplate = `{
                 "tags": [
                     "GetStrategyList"
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/user": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "GetUserInfo",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetUserInfo"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/oauth/github": {
+            "get": {
+                "description": "Github OAuth Login",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OAuth"
+                ],
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User ID",
-                        "name": "user_id",
-                        "in": "header",
+                        "description": "Github OAuth Code",
+                        "name": "code",
+                        "in": "query",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/oauth/password": {
+            "post": {
+                "description": "PasswordOauthLogin",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Oauth"
+                ],
+                "parameters": [
+                    {
+                        "description": "PasswordRequest Model",
+                        "name": "passwordRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/oauth.PasswordRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -402,6 +451,25 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "oauth.PasswordRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "JWT": {
+            "description": "Type 'Bearer \\\u003cTOKEN\\\u003e' to correctly set the AccessToken",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

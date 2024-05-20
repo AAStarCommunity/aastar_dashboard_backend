@@ -5,6 +5,7 @@ import (
 	"aastar_dashboard_back/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"strconv"
 )
 
 // GetApiKeyList
@@ -12,13 +13,13 @@ import (
 // @Description GetApiKeyList
 // @Accept json
 // @Product json
-// @Param user_id header string true "User ID"
 // @Router /api/v1/api_key/list  [get]
 // @Success 200
+// @Security JWT
 func GetApiKeyList(ctx *gin.Context) {
 	response := model.GetResponse()
 
-	userId := ctx.GetHeader("user_id")
+	userId := ctx.GetString("user_id")
 	if userId == "" {
 		response.FailCode(ctx, 400, "user_id is required")
 		return
@@ -36,10 +37,10 @@ func GetApiKeyList(ctx *gin.Context) {
 // @Description GetApiKey
 // @Accept json
 // @Product json
-// @Param user_id header string true "User ID"
 // @Param api_key query string true "Api Key"
 // @Router /api/v1/api_key  [get]
 // @Success 200
+// @Security JWT
 func GetApiKey(ctx *gin.Context) {
 	response := model.GetResponse()
 	apiKeyStr := ctx.Query("api_key")
@@ -60,14 +61,14 @@ func GetApiKey(ctx *gin.Context) {
 // @Description UpdateApiKey
 // @Accept json
 // @Product json
-// @Param user_id header string true "User ID"
 // @Param uploadApiKeyRequest  body  model.UploadApiKeyRequest true "UploadApiKeyRequest Model"
 // @Router /api/v1/api_key  [put]
 // @Success 200
+// @Security JWT
 func UpdateApiKey(ctx *gin.Context) {
 	response := model.GetResponse()
 	request := model.UploadApiKeyRequest{}
-	userId := ctx.GetHeader("user_id")
+	userId := ctx.GetString("user_id")
 	if userId == "" {
 		response.FailCode(ctx, 400, "user_id is required")
 		return
@@ -79,7 +80,11 @@ func UpdateApiKey(ctx *gin.Context) {
 	}
 
 	apikey, err := convertUploadRequestToApiKey(request)
-	apikey.UserId = userId
+	if err != nil {
+		response.FailCode(ctx, 400, err.Error())
+		return
+	}
+	apikey.UserId, err = strconv.ParseInt(userId, 10, 64)
 	if err != nil {
 		response.FailCode(ctx, 400, err.Error())
 		return
@@ -96,10 +101,10 @@ func UpdateApiKey(ctx *gin.Context) {
 // @Description ApplyApiKey
 // @Accept json
 // @Product json
-// @Param user_id header string true "User ID"
 // @Param applyApiKeyRequest  body  model.ApplyApiKeyRequest true "UploadApiKeyRequest Model"
 // @Router /api/v1/api_key/apply  [post]
 // @Success 200
+// @Security JWT
 func ApplyApiKey(ctx *gin.Context) {
 
 	response := model.GetResponse()
@@ -109,13 +114,18 @@ func ApplyApiKey(ctx *gin.Context) {
 		response.FailCode(ctx, 400, err.Error())
 		return
 	}
-	userId := ctx.GetHeader("user_id")
+	userId := ctx.GetString("user_id")
 	if userId == "" {
 		response.FailCode(ctx, 400, "user_id is required")
 		return
 	}
+	userIDInt, err := strconv.ParseInt(userId, 10, 64)
+	if err != nil {
+		response.FailCode(ctx, 400, err.Error())
+		return
+	}
 	apiKeyModule := model.ApiKeyModel{
-		UserId:  userId,
+		UserId:  userIDInt,
 		KeyName: request.ApiKeyName,
 	}
 	apiKeySecret := uuid.New().String()
@@ -135,10 +145,10 @@ func ApplyApiKey(ctx *gin.Context) {
 // @Description DeleteApiKey
 // @Accept json
 // @Product json
-// @Param user_id header string true "User ID"
 // @Param api_key query string true "Api Key"
 // @Router /api/v1/api_key  [delete]
 // @Success 200
+// @Security JWT
 func DeleteApiKey(ctx *gin.Context) {
 	response := model.GetResponse()
 	apiKeyStr := ctx.Query("api_key")

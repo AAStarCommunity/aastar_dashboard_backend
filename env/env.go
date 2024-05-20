@@ -1,12 +1,16 @@
-package model
+package env
 
 import (
+	"github.com/sirupsen/logrus"
+	"os"
 	"strings"
 )
 
 const EnvKey = "Env"
 const ProdEnv = "prod"
 const DevEnv = "dev"
+
+var Environment *Env
 
 type Env struct {
 	Name     string // env Name, like `prod`, `dev` and etc.,
@@ -23,4 +27,18 @@ func (env *Env) IsProduction() bool {
 
 func (env *Env) GetEnvName() *string {
 	return &env.Name
+}
+func Init() {
+	envName := DevEnv
+	if len(os.Getenv(EnvKey)) > 0 {
+		envName = os.Getenv(EnvKey)
+	}
+	Environment = &Env{
+		Name: envName,
+		Debugger: func() bool {
+			return envName != ProdEnv
+		}(),
+	}
+	logrus.Infof("Config loaded successfully Env: %s", Environment.Name)
+
 }
