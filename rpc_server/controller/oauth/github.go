@@ -185,9 +185,9 @@ func GithubOAuthLogin(ctx *gin.Context) {
 				user = &model.User{}
 				//New User By GitHub
 				user.GithubId = githubUser.Id
-				user.GitHubAvatarUrl = githubUser.AvatarUrl
-				user.GitHubLogin = githubUser.Login
-				user.GitHubName = githubUser.Name
+				user.GithubAvatarUrl = githubUser.AvatarUrl
+				user.GithubLogin = githubUser.Login
+				user.GithubName = githubUser.Name
 				user.Email = githubUser.Email
 				user.UserId = uuid.New().String()
 				err := repository.CreateUser(user)
@@ -195,7 +195,15 @@ func GithubOAuthLogin(ctx *gin.Context) {
 					ctx.JSON(http.StatusBadRequest, err)
 					return
 				}
+			} else {
+				if user.GithubName != githubUser.Name {
+					user.GithubName = githubUser.Name
+				}
+				if user.GithubAvatarUrl != githubUser.AvatarUrl {
+					user.GithubAvatarUrl = githubUser.AvatarUrl
+				}
 			}
+
 			_ = repository.UpdateUserLatestLoginTime(user)
 			ctx.Set("user_id", user.UserId)
 			middlewares.GinJwtMiddleware().LoginHandler(ctx)
