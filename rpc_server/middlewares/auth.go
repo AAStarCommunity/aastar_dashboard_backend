@@ -14,9 +14,14 @@ func GinJwtMiddleware() *jwt.GinJWTMiddleware {
 }
 
 func AuthHandler() gin.HandlerFunc {
+	realm := config.GetSystemConfigByKey(config.KeyJwtRealm)
+	secret := config.GetSystemConfigByKey(config.KeyJwtSecret)
+	if realm == "" || secret == "" {
+		panic("realm or secret is empty")
+	}
 	m, _ := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:      config.GetSystemConfigByKey(config.KeyJwtRealm),
-		Key:        []byte(config.GetSystemConfigByKey(config.KeyJwtSecret)),
+		Realm:      realm,
+		Key:        []byte(secret),
 		Timeout:    time.Hour * 48,
 		MaxRefresh: time.Hour / 2,
 		IdentityHandler: func(c *gin.Context) interface{} {

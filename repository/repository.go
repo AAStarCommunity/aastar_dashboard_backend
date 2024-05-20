@@ -17,6 +17,9 @@ func Init() {
 
 	onlyOnce.Do(func() {
 		dsn := config.GetDsn()
+		if dsn == "" {
+			logrus.Fatalf("DSN is empty")
+		}
 		logrus.Infof("DSN : %s", dsn)
 		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
