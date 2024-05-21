@@ -16,7 +16,6 @@ func SelectListByUserId(userId string) (strategies []model.PaymasterStrategy, er
 	return strategies, nil
 }
 
-// DeleteByStrategyCode TODO soft DELETE
 func DeleteByStrategyCode(strategyCode string) (err error) {
 	tx := dataBase.Where("strategy_code = ?", strategyCode).Delete(&model.PaymasterStrategy{})
 	if tx.Error != nil {

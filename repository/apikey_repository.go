@@ -16,7 +16,6 @@ func SelectApiKeyListByUserId(userId string) (apikeys []model.ApiKeyModel, err e
 	return apikeys, nil
 }
 
-// DeleteApiKeyByApiKey  TODO soft DELETE
 func DeleteApiKeyByApiKey(apiKey string) (err error) {
 	tx := dataBase.Where("api_key = ?", apiKey).Delete(&model.ApiKeyModel{})
 	if tx.Error != nil {
