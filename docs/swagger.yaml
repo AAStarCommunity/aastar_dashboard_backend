@@ -41,6 +41,13 @@ definitions:
       strategy_name:
         type: string
     type: object
+  oauth.PasswordRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
 info:
   contact:
     name: AAStar BackEndDashBoard
@@ -64,11 +71,6 @@ paths:
       - application/json
       description: DeleteApiKey
       parameters:
-      - description: User ID
-        in: header
-        name: user_id
-        required: true
-        type: string
       - description: Api Key
         in: query
         name: api_key
@@ -77,6 +79,8 @@ paths:
       responses:
         "200":
           description: OK
+      security:
+      - JWT: []
       tags:
       - DeleteApiKey
     get:
@@ -84,11 +88,6 @@ paths:
       - application/json
       description: GetApiKey
       parameters:
-      - description: User ID
-        in: header
-        name: user_id
-        required: true
-        type: string
       - description: Api Key
         in: query
         name: api_key
@@ -97,6 +96,8 @@ paths:
       responses:
         "200":
           description: OK
+      security:
+      - JWT: []
       tags:
       - GetApiKey
     put:
@@ -104,11 +105,6 @@ paths:
       - application/json
       description: UpdateApiKey
       parameters:
-      - description: User ID
-        in: header
-        name: user_id
-        required: true
-        type: string
       - description: UploadApiKeyRequest Model
         in: body
         name: uploadApiKeyRequest
@@ -118,6 +114,8 @@ paths:
       responses:
         "200":
           description: OK
+      security:
+      - JWT: []
       tags:
       - UpdateApiKey
   /api/v1/api_key/apply:
@@ -126,11 +124,6 @@ paths:
       - application/json
       description: ApplyApiKey
       parameters:
-      - description: User ID
-        in: header
-        name: user_id
-        required: true
-        type: string
       - description: UploadApiKeyRequest Model
         in: body
         name: applyApiKeyRequest
@@ -140,6 +133,8 @@ paths:
       responses:
         "200":
           description: OK
+      security:
+      - JWT: []
       tags:
       - ApplyApiKey
   /api/v1/api_key/list:
@@ -147,15 +142,11 @@ paths:
       consumes:
       - application/json
       description: GetApiKeyList
-      parameters:
-      - description: User ID
-        in: header
-        name: user_id
-        required: true
-        type: string
       responses:
         "200":
           description: OK
+      security:
+      - JWT: []
       tags:
       - GetApiKeyList
   /api/v1/paymaster_strategy:
@@ -164,11 +155,6 @@ paths:
       - application/json
       description: DeleteStrategy
       parameters:
-      - description: User ID
-        in: header
-        name: user_id
-        required: true
-        type: string
       - description: PaymasterStrategy Code
         in: query
         name: strategy_code
@@ -177,6 +163,8 @@ paths:
       responses:
         "200":
           description: OK
+      security:
+      - JWT: []
       tags:
       - DeleteStrategy
     get:
@@ -184,11 +172,6 @@ paths:
       - application/json
       description: GetStrategy
       parameters:
-      - description: User ID
-        in: header
-        name: user_id
-        required: true
-        type: string
       - description: PaymasterStrategy Code
         in: query
         name: strategy_code
@@ -197,6 +180,8 @@ paths:
       responses:
         "200":
           description: OK
+      security:
+      - JWT: []
       tags:
       - GetStrategy
     post:
@@ -204,11 +189,6 @@ paths:
       - application/json
       description: AddStrategy
       parameters:
-      - description: User ID
-        in: header
-        name: user_id
-        required: true
-        type: string
       - description: UploadStrategyRequest Model
         in: body
         name: uploadStrategyRequest
@@ -218,6 +198,8 @@ paths:
       responses:
         "200":
           description: OK
+      security:
+      - JWT: []
       tags:
       - AddStrategy
     put:
@@ -225,11 +207,6 @@ paths:
       - application/json
       description: UpdateStrategy
       parameters:
-      - description: User ID
-        in: header
-        name: user_id
-        required: true
-        type: string
       - description: UploadStrategyRequest Model
         in: body
         name: uploadStrategyRequest
@@ -239,6 +216,8 @@ paths:
       responses:
         "200":
           description: OK
+      security:
+      - JWT: []
       tags:
       - UpdateStrategy
   /api/v1/paymaster_strategy/list:
@@ -246,15 +225,62 @@ paths:
       consumes:
       - application/json
       description: GetStrategyList
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      tags:
+      - GetStrategyList
+  /api/v1/user:
+    get:
+      consumes:
+      - application/json
+      description: GetUserInfo
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      tags:
+      - GetUserInfo
+  /oauth/github:
+    get:
+      consumes:
+      - application/json
+      description: Github OAuth Login
       parameters:
-      - description: User ID
-        in: header
-        name: user_id
+      - description: Github OAuth Code
+        in: query
+        name: code
         required: true
         type: string
       responses:
         "200":
           description: OK
       tags:
-      - GetStrategyList
+      - OAuth
+  /oauth/password:
+    post:
+      consumes:
+      - application/json
+      description: PasswordOauthLogin
+      parameters:
+      - description: PasswordRequest Model
+        in: body
+        name: passwordRequest
+        required: true
+        schema:
+          $ref: '#/definitions/oauth.PasswordRequest'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Oauth
+securityDefinitions:
+  JWT:
+    description: Type 'Bearer \<TOKEN\>' to correctly set the AccessToken
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

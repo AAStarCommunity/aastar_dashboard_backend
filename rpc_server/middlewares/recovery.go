@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"aastar_dashboard_back/config"
+	"aastar_dashboard_back/env"
 	"aastar_dashboard_back/model"
 	"errors"
 	"fmt"
@@ -15,7 +15,7 @@ func GenericRecoveryHandler() gin.HandlerFunc {
 	DefaultErrorWriter := &PanicExceptionRecord{}
 	return gin.RecoveryWithWriter(DefaultErrorWriter, func(c *gin.Context, err interface{}) {
 		errStr := ""
-		if config.Environment.Debugger {
+		if env.Environment.Debugger {
 			errStr = fmt.Sprintf("%v", err)
 		}
 		model.GetResponse().SetHttpCode(http.StatusInternalServerError).FailCode(c, http.StatusInternalServerError, errStr)

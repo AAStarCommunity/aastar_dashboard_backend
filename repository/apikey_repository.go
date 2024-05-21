@@ -29,7 +29,7 @@ func FindApiKeyByApiKey(apiKey string) (apikey *model.ApiKeyModel, err error) {
 	tx := dataBase.Where("api_key = ?", apiKey).Where("deleted_at IS NULL").First(&apikey)
 	if tx.Error != nil {
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			return nil, xerrors.Errorf("Can Not Find apiKey %s", apiKey)
+			return nil, tx.Error
 		}
 		return apikey, xerrors.Errorf("error when finding apikey: %w", tx.Error)
 	}

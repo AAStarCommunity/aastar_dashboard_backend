@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"aastar_dashboard_back/config"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -12,8 +13,14 @@ var (
 	onlyOnce = sync.Once{}
 )
 
-func Init(dsn string) {
+func Init() {
+
 	onlyOnce.Do(func() {
+		dsn := config.GetDsn()
+		if dsn == "" {
+			logrus.Fatalf("DSN is empty")
+		}
+		logrus.Infof("DSN : %s", dsn)
 		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
 			logrus.Fatalf("Error when opening DB: %s\n", err)
