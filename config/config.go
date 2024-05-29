@@ -46,3 +46,14 @@ func GetDsn() string {
 		systemConfigViper.GetString("DB.ssl_mode"),
 	)
 }
+func GetDataViewDsn() string {
+	return fmt.Sprintf(dscTemplate,
+		systemConfigViper.GetString("DataViewDB.host"),
+		systemConfigViper.GetString("DataViewDB.port"),
+		systemConfigViper.GetString("DataViewDB.user"),
+		systemConfigViper.GetString("DataViewDB.password"),
+		systemConfigViper.GetString("DataViewDB.db_name"),
+		systemConfigViper.GetString("DataViewDB.tz"),
+		systemConfigViper.GetString("DataViewDB.ssl_mode"),
+	)
+}

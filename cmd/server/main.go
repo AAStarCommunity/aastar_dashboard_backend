@@ -2,6 +2,7 @@ package main
 
 import (
 	"aastar_dashboard_back/config"
+	"aastar_dashboard_back/data_view_repository"
 	"aastar_dashboard_back/docs"
 	"aastar_dashboard_back/env"
 	"aastar_dashboard_back/repository"
@@ -62,6 +63,7 @@ func main() {
 
 	oauth.Init()
 	repository.Init()
+	data_view_repository.Init()
 	engine.GET("/api/healthz", Healthz)
 	buildOAuth()
 	buildMid()
@@ -101,6 +103,15 @@ func buildRouter() {
 
 	engine.GET("/api/v1/user", controller.GetUserInfo)
 
+	//engine.GET("/api/v1/sponsor/transactions", controller.GetSponsorTransactions)
+	engine.POST("/api/v1/sponsor/deposit", controller.SponsorDeposit)
+	engine.POST("/api/v1/sponsor/withdraw", controller.SponsorWithdraw)
+	//engine.GET("/api/v1/sponsor/metadata", controller.SponsorGetMetaData)
+	engine.GET("/api/v1/data/sponsor_transactions", controller.DataViewGetSponsorTransactionList)
+
+	engine.GET("/api/v1/data/sponsor_total_balance", controller.DataViewGetSponsorTotalBalance)
+
+	engine.GET("/api/v1/data/paymaster_recall_list", controller.DataViewApiKeyPaymasterRecallDetailList)
 }
 
 // buildMod set Mode by Environment
