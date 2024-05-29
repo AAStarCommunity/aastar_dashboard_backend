@@ -23,6 +23,7 @@ type WithdrawSponsorRequest struct {
 }
 
 func SponsorDeposit(ctx *gin.Context) {
+
 	request := DepositSponsorRequest{}
 	response := model.GetResponse()
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -30,7 +31,6 @@ func SponsorDeposit(ctx *gin.Context) {
 		response.SetHttpCode(http.StatusBadRequest).FailCode(ctx, http.StatusBadRequest, errStr)
 		return
 	}
-	//
 
 }
 func SponsorWithdraw(ctx *gin.Context) {

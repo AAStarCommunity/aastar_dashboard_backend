@@ -2,6 +2,7 @@ package config
 
 import "C"
 import (
+	"aastar_dashboard_back/model"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -13,13 +14,13 @@ var (
 	KeyJwtSecret = "JWT.Security"
 	KeyJwtRealm  = "JWT.Realm"
 )
+var SignaerEoa *model.EOA
 
 func AllConfig() map[string]any {
 	return systemConfigViper.AllSettings()
 }
 
 func Init(configPath string) {
-
 	systemConfigViper = viper.New()
 	systemConfigViper.SetConfigFile(configPath)
 	err := systemConfigViper.ReadInConfig()
@@ -27,6 +28,15 @@ func Init(configPath string) {
 		panic(err)
 	}
 	logrus.Infof("System Config: %v", AllConfig())
+	signerKey := systemConfigViper.GetString("signature_private_key")
+	if signerKey == "" {
+		panic("signature_private_key is empty")
+	}
+	eoa, err := model.NewEoa(signerKey)
+	if err != nil {
+		panic(fmt.Sprintf("signer key error: %s", err))
+	}
+	SignaerEoa = eoa
 
 }
 func GetSystemConfigByKey(key string) string {

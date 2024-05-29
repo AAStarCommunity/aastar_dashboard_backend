@@ -107,7 +107,7 @@ func DataViewApiKeyPaymasterRecallDetailList(ctx *gin.Context) {
 }
 
 func DataViewPaymasterMonthRecallAnalysis(ctx *gin.Context) {
-	//
+
 }
 func DataViewAllApikeyPaymasterDailySuccessRate(ctx *gin.Context) {
 	//
