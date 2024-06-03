@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 )
@@ -38,7 +37,6 @@ func convertAPiKeyDBModelToAPIKeyVo(apiKeyModel *model.ApiKeyModel) (*APIKeyVo, 
 	if apiKeyModel.Extra == nil {
 		return &apiKeyVo, nil
 	}
-	logrus.Info("apiKeyModel.Extra", apiKeyModel.Extra)
 	err := json.Unmarshal(apiKeyModel.Extra, &extra)
 	if err != nil {
 		return &apiKeyVo, err
