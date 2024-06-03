@@ -1,11 +1,12 @@
 package middlewares
 
 import (
-	"aastar_dashboard_back/env"
 	"aastar_dashboard_back/model"
+	"aastar_dashboard_back/util"
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
 )
@@ -14,11 +15,11 @@ import (
 func GenericRecoveryHandler() gin.HandlerFunc {
 	DefaultErrorWriter := &PanicExceptionRecord{}
 	return gin.RecoveryWithWriter(DefaultErrorWriter, func(c *gin.Context, err interface{}) {
-		errStr := ""
-		if env.Environment.Debugger {
-			errStr = fmt.Sprintf("%v", err)
-		}
-		model.GetResponse().SetHttpCode(http.StatusInternalServerError).FailCode(c, http.StatusInternalServerError, errStr)
+		errInfo := fmt.Sprintf("[panic]: err : [%v] , stack :[%v]", err, util.GetCurrentGoroutineStack())
+		logrus.Error(errInfo)
+		logrus.Errorf("%v", errInfo)
+		returnError := fmt.Sprintf("%v", err)
+		model.GetResponse().SetHttpCode(http.StatusInternalServerError).FailCode(c, http.StatusInternalServerError, returnError)
 	})
 }
 

@@ -59,13 +59,16 @@ type Response struct {
 
 // Fail represents 5XX error
 func (r *Response) Fail(ctx *gin.Context) *Response {
+
 	r.SetCode(http.StatusInternalServerError)
+	r.httpCode = http.StatusInternalServerError
 	r.json(ctx)
 	return r
 }
 
 // FailCode customer error codes
 func (r *Response) FailCode(ctx *gin.Context, code int, msg ...string) *Response {
+	r.httpCode = code
 	r.SetCode(code)
 	if msg != nil {
 		r.WithMessage(msg[0])

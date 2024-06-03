@@ -11,6 +11,7 @@ type transactionLog struct {
 	IsTestNet  bool           `gorm:"type:boolean" json:"is_test_net"`
 	Amount     model.BigFloat `gorm:"type:numeric(30,18)" json:"amount"`
 	TxHash     string         `gorm:"type:varchar(255)" json:"tx_hash"`
+	Time       string         `gorm:"type:varchar(255)" json:"time"`
 }
 
 // DataViewGetSponsorTransactionList
@@ -43,6 +44,7 @@ func DataViewGetSponsorTransactionList(ctx *gin.Context) {
 			IsTestNet:  log.IsTestNet,
 			Amount:     log.Amount,
 			TxHash:     log.TxHash,
+			Time:       log.CreatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}
 	response.WithDataSuccess(ctx, transactionLogs)
@@ -86,7 +88,7 @@ func DataViewGetSponsorTotalBalance(ctx *gin.Context) {
 // @Description DataViewApiKeyPaymasterRecallDetailList
 // @Accept json
 // @Produce json
-// @Router /api/v1/data_view/api_key_paymaster_recall_detail_list/[get]
+// @Router /api/v1/data/paymaster_requests/[get]
 // @Param api_key query string true
 // @Success 200
 // @Security JWT
@@ -114,5 +116,8 @@ func DataViewAllApikeyPaymasterDailySuccessRate(ctx *gin.Context) {
 }
 
 func DataViewApiKeyPaymasterRecallSuccessRate(ctx *gin.Context) {
+	//
+}
+func DataViewApiSuccessRate(ctx *gin.Context) {
 	//
 }

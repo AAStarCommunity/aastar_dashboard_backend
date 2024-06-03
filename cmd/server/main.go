@@ -5,12 +5,14 @@ import (
 	"aastar_dashboard_back/data_view_repository"
 	"aastar_dashboard_back/docs"
 	"aastar_dashboard_back/env"
+	"aastar_dashboard_back/model"
 	"aastar_dashboard_back/repository"
 	"aastar_dashboard_back/rpc_server/controller"
 	"aastar_dashboard_back/rpc_server/controller/oauth"
 	"aastar_dashboard_back/rpc_server/middlewares"
 	"flag"
 	"io"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -61,6 +63,8 @@ func main() {
 	buildMod(engine)
 	buildSwagger(engine)
 
+	engine.Use(middlewares.GenericRecoveryHandler())
+	engine.Use(middlewares.LogHandler())
 	oauth.Init()
 	repository.Init()
 	data_view_repository.Init()
@@ -68,6 +72,11 @@ func main() {
 	buildOAuth()
 	buildMid()
 	buildRouter()
+
+	engine.NoRoute(func(ctx *gin.Context) {
+		model.GetResponse().SetHttpCode(http.StatusNotFound).FailCode(ctx, http.StatusNotFound)
+	})
+
 	_ = engine.Run(getPort())
 }
 
@@ -80,10 +89,6 @@ func getConfigPath() string {
 	return configPath
 }
 func buildMid() {
-	engine.Use(middlewares.GenericRecoveryHandler())
-	if env.Environment.IsDevelopment() {
-		engine.Use(middlewares.LogHandler())
-	}
 	engine.Use(middlewares.CorsHandler())
 	engine.Use(middlewares.AuthHandler())
 }
@@ -111,7 +116,10 @@ func buildRouter() {
 
 	engine.GET("/api/v1/data/sponsor_total_balance", controller.DataViewGetSponsorTotalBalance)
 
-	engine.GET("/api/v1/data/paymaster_recall_list", controller.DataViewApiKeyPaymasterRecallDetailList)
+	engine.GET("/api/v1/data/paymaster_requests", controller.DataViewApiKeyPaymasterRecallDetailList)
+
+	engine.GET("/api/v1/data/api_detail_data/apikey_request_total_data", controller.DataViewApiKeyPaymasterRecallDetailList)
+
 }
 
 // buildMod set Mode by Environment

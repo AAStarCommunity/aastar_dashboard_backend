@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"github.com/ethereum/go-ethereum/crypto"
 	"math/rand"
+	"runtime"
 	"time"
 )
 
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+const defaultStackSize = 4096
 
 var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
 
@@ -30,4 +32,9 @@ func GetSign(message []byte, privateKey *ecdsa.PrivateKey) ([]byte, error) {
 	//In Ethereum, the last byte of the signature result represents the recovery ID of the signature, and by adding 27 to ensure it conforms to Ethereum's specification.
 	sig[64] += 27
 	return sig, nil
+}
+func GetCurrentGoroutineStack() string {
+	var buf [defaultStackSize]byte
+	n := runtime.Stack(buf[:], false)
+	return string(buf[:n])
 }
