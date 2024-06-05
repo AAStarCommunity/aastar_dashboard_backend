@@ -4,6 +4,24 @@ definitions:
     properties:
       api_key_name:
         type: string
+      domain_whitelist:
+        items:
+          type: string
+        type: array
+      erc20_paymaster_enable:
+        type: boolean
+      ip_white_list:
+        items:
+          type: string
+        type: array
+      network_limit_enable:
+        type: boolean
+      paymaster_enable:
+        type: boolean
+      project_sponsor_paymaster_enable:
+        type: boolean
+      user_pay_paymaster_enable:
+        type: boolean
     type: object
   model.UploadApiKeyRequest:
     properties:
@@ -11,6 +29,24 @@ definitions:
         type: string
       api_key_name:
         type: string
+      domain_whitelist:
+        items:
+          type: string
+        type: array
+      erc20_paymaster_enable:
+        type: boolean
+      ip_white_list:
+        items:
+          type: string
+        type: array
+      network_limit_enable:
+        type: boolean
+      paymaster_enable:
+        type: boolean
+      project_sponsor_paymaster_enable:
+        type: boolean
+      user_pay_paymaster_enable:
+        type: boolean
     type: object
   model.UploadStrategyRequest:
     properties:
@@ -149,6 +185,172 @@ paths:
       - JWT: []
       tags:
       - GetApiKeyList
+  /api/v1/data/api_keys_data_overview:
+    get:
+      consumes:
+      - application/json
+      description: DataViewApiKeysOverView
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: DataViewApiKeysOverView
+      tags:
+      - DataViewApiKeysOverView
+  /api/v1/data/balance:
+    get:
+      consumes:
+      - application/json
+      description: DataViewGetBalance
+      parameters:
+      - description: is_test_net
+        in: query
+        name: is_test_net
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: DataViewGetBalance
+      tags:
+      - DataViewGetBalance
+  /api/v1/data/paymaster_pay_type_metrics:
+    get:
+      consumes:
+      - application/json
+      description: DataViewPaymasterPayTypeMetrics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: DataViewPaymasterPayTypeMetrics
+      tags:
+      - DataViewPaymasterPayTypeMetrics
+  /api/v1/data/paymaster_requests:
+    get:
+      consumes:
+      - application/json
+      description: DataViewApiKeyPaymasterRecallDetailList
+      parameters:
+      - description: Api Key
+        in: query
+        name: api_key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: DataViewApiKeyPaymasterRecallDetailList
+      tags:
+      - DataViewApiKeyPaymasterRecallDetailList
+  /api/v1/data/request_count_one:
+    get:
+      consumes:
+      - application/json
+      description: DataViewRequestCountOne
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: DataViewRequestCountOne
+      tags:
+      - DataViewRequestCountOne
+  /api/v1/data/request_health_list:
+    get:
+      consumes:
+      - application/json
+      description: DataViewRequestHealth
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: DataViewRequestHealth
+      tags:
+      - DataViewRequestHealth
+  /api/v1/data/sponsor_transaction_list:
+    get:
+      consumes:
+      - application/json
+      description: DataViewGetSponsorTransactionList
+      parameters:
+      - description: is_test_net
+        in: query
+        name: is_test_net
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: DataViewGetSponsorTransactionList
+      tags:
+      - DataViewGetSponsorTransactionList
+  /api/v1/data/sponsored_metrics:
+    get:
+      consumes:
+      - application/json
+      description: DataViewSponsoredMetrics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: DataViewSponsoredMetrics
+      tags:
+      - DataViewSponsoredMetrics
+  /api/v1/data/success_rate_list:
+    get:
+      consumes:
+      - application/json
+      description: DataViewSuccessRate
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: DataViewSuccessRate
+      tags:
+      - DataViewSuccessRate
+  /api/v1/data/success_rate_one:
+    get:
+      consumes:
+      - application/json
+      description: DataViewSuccessRateOne
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: DataViewSuccessRateOne
+      tags:
+      - DataViewSuccessRateOne
   /api/v1/paymaster_strategy:
     delete:
       consumes:

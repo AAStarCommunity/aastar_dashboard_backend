@@ -120,7 +120,7 @@ type defaultRes struct {
 // WithData represents response with data
 func (r *Response) WithData(data interface{}) *Response {
 	switch data.(type) {
-	case string, int, bool:
+	case string, int, bool, float32, float64:
 		r.Result.Data = &defaultRes{Result: data}
 	default:
 		r.Result.Data = data

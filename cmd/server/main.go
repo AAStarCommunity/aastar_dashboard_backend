@@ -108,18 +108,19 @@ func buildRouter() {
 
 	engine.GET("/api/v1/user", controller.GetUserInfo)
 
-	//engine.GET("/api/v1/sponsor/transactions", controller.GetSponsorTransactions)
 	engine.POST("/api/v1/sponsor/deposit", controller.SponsorDeposit)
 	engine.POST("/api/v1/sponsor/withdraw", controller.SponsorWithdraw)
-	//engine.GET("/api/v1/sponsor/metadata", controller.SponsorGetMetaData)
 	engine.GET("/api/v1/data/sponsor_transactions", controller.DataViewGetSponsorTransactionList)
-
-	engine.GET("/api/v1/data/sponsor_total_balance", controller.DataViewGetSponsorTotalBalance)
-
 	engine.GET("/api/v1/data/paymaster_requests", controller.DataViewApiKeyPaymasterRecallDetailList)
-
 	engine.GET("/api/v1/data/api_detail_data/apikey_request_total_data", controller.DataViewApiKeyPaymasterRecallDetailList)
-
+	engine.GET("/api/v1/data/request_health_list", controller.DataViewRequestHealth)
+	engine.GET("/api/v1/data/success_rate_list", controller.DataViewSuccessRate)
+	engine.GET("/api/v1/data/request_count_one", controller.DataViewRequestCountOne)
+	engine.GET("/api/v1/data/success_rate_one", controller.DataViewSuccessRateOne)
+	engine.GET("/api/v1/data/balance", controller.DataViewGetBalance)
+	engine.GET("/api/v1/data/sponsored_metrics", controller.DataViewSponsoredMetrics)
+	engine.GET("/api/v1/data/api_keys_data_overview", controller.DataViewApiKeysOverView)
+	engine.GET("/api/v1/data/paymaster_pay_type_metrics", controller.DataViewPaymasterPayTypeMetrics)
 }
 
 // buildMod set Mode by Environment
