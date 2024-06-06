@@ -578,6 +578,43 @@
                 }
             }
         },
+        "/api/v1/paymaster_strategy/switch_status": {
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "SwitchStrategyStatus",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SwitchStrategyStatus"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "PaymasterStrategy Code",
+                        "name": "strategy_code",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Status",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/user": {
             "get": {
                 "security": [

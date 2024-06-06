@@ -434,6 +434,29 @@ paths:
       - JWT: []
       tags:
       - GetStrategyList
+  /api/v1/paymaster_strategy/switch_status:
+    put:
+      consumes:
+      - application/json
+      description: SwitchStrategyStatus
+      parameters:
+      - description: PaymasterStrategy Code
+        in: query
+        name: strategy_code
+        required: true
+        type: string
+      - description: Status
+        in: query
+        name: status
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      tags:
+      - SwitchStrategyStatus
   /api/v1/user:
     get:
       consumes:

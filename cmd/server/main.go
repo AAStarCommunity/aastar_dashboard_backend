@@ -99,7 +99,7 @@ func buildRouter() {
 	engine.PUT("/api/v1/paymaster_strategy", controller.UpdateStrategy)
 	engine.POST("/api/v1/paymaster_strategy", controller.AddStrategy)
 	engine.DELETE("/api/v1/paymaster_strategy", controller.DeleteStrategy)
-
+	engine.PUT("/api/v1/paymaster_strategy/switch_status", controller.SwitchStrategyStatus)
 	engine.GET("/api/v1/api_key/list", controller.GetApiKeyList)
 	engine.GET("/api/v1/api_key", controller.GetApiKey)
 	engine.PUT("/api/v1/api_key", controller.UpdateApiKey)

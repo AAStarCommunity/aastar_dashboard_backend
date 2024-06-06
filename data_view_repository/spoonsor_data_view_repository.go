@@ -4,11 +4,13 @@ import (
 	"aastar_dashboard_back/global_const"
 	"aastar_dashboard_back/model"
 	"gorm.io/datatypes"
+	"time"
 )
 
 type UserSponsorBalanceDBModel struct {
 	model.BaseData
 	PayUserId        string         `gorm:"type:varchar(255);index" json:"pay_user_id"`
+	SponsoredBalance model.BigFloat `gorm:"type:numeric(30,18)" json:"sponsored_balance"`
 	AvailableBalance model.BigFloat `gorm:"type:numeric(30,18)" json:"available_balance"`
 	LockBalance      model.BigFloat `gorm:"type:numeric(30,18)" json:"lock_balance"`
 	Source           string         `gorm:"type:varchar(255)" json:"source"`
@@ -75,4 +77,25 @@ func FindPaymasterRecallLogDetailList(apiKey string) (models []*PaymasterRecallL
 		return nil, tx.Error
 	}
 	return models, nil
+}
+
+type GetApiKeysRequestDayRequestCountResult struct {
+	ProjectApikey string `json:"project_apikey"`
+	SuccessCount  int64  `json:"success_count"`
+	FailureCount  int64  `json:"failure_count"`
+}
+
+// GetApiKeysRequestDayRequestCount  TODO Optimize (will use middle Table)
+func GetApiKeysRequestDayRequestCount(apikeys []string) (*[]GetApiKeysRequestDayRequestCountResult, error) {
+	var results []GetApiKeysRequestDayRequestCountResult
+	err := dataVeiewDB.Model(&PaymasterRecallLogDbModel{}).
+		Select("project_apikey, COUNT(CASE WHEN status = 200 THEN 1 END) AS success_count, COUNT(CASE WHEN status != 200 THEN 1 END) AS failure_count").
+		Where("created_at >= ? AND project_apikey IN ?", time.Now().Add(-24*time.Hour), apikeys).
+		Group("project_apikey").
+		Scan(&results).Error
+	if err != nil {
+		return nil, err
+	}
+	return &results, nil
+
 }

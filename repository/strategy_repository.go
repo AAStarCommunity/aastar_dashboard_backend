@@ -15,7 +15,13 @@ func SelectListByUserId(userId string) (strategies []model.PaymasterStrategy, er
 	}
 	return strategies, nil
 }
-
+func SwitchStrategyStatus(strategyCode string, status string) error {
+	tx := dataBase.Model(&model.PaymasterStrategy{}).Where("strategy_code = ?", strategyCode).Update("status", status)
+	if tx.Error != nil {
+		return xerrors.Errorf("error when updating strategy: %w", tx.Error)
+	}
+	return nil
+}
 func DeleteByStrategyCode(strategyCode string) (err error) {
 	tx := dataBase.Where("strategy_code = ?", strategyCode).Delete(&model.PaymasterStrategy{})
 	if tx.Error != nil {

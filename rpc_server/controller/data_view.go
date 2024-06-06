@@ -3,6 +3,7 @@ package controller
 import (
 	"aastar_dashboard_back/data_view_repository"
 	"aastar_dashboard_back/model"
+	"aastar_dashboard_back/repository"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -167,20 +168,44 @@ func DataViewGetBalance(ctx *gin.Context) {
 		return
 	}
 
-	sponsorModel, err := data_view_repository.FindUserSponsorModuleByUserid(userId, isTestNetBool)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-
-		response.WithDataSuccess(ctx, 0)
-		return
-
-	}
-	if err != nil {
-		response.FailCode(ctx, 500, err.Error())
+	balanceType := ctx.Query("balance_type")
+	if balanceType == "" {
+		response.FailCode(ctx, 400, "balance_type is required")
 		return
 	}
-	balanceBigFloat := sponsorModel.AvailableBalance
-	balanceFloat, _ := balanceBigFloat.Float64()
-	response.WithDataSuccess(ctx, balanceFloat)
+	var balanceRes float64
+	if balanceType == "total_sponsored" {
+		sponsorModel, err := data_view_repository.FindUserSponsorModuleByUserid(userId, isTestNetBool)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			response.WithDataSuccess(ctx, 0)
+			return
+		}
+		if err != nil {
+			response.FailCode(ctx, 500, err.Error())
+			return
+		}
+		balanceBigFloat := sponsorModel.SponsoredBalance
+		balanceRes, _ = balanceBigFloat.Float64()
+
+	} else if balanceType == "sponsor_quota_balance" {
+		sponsorModel, err := data_view_repository.FindUserSponsorModuleByUserid(userId, isTestNetBool)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+
+			response.WithDataSuccess(ctx, 0)
+			return
+
+		}
+		if err != nil {
+			response.FailCode(ctx, 500, err.Error())
+			return
+		}
+		balanceBigFloat := sponsorModel.AvailableBalance
+		balanceRes, _ = balanceBigFloat.Float64()
+
+	}
+	response.WithDataSuccess(ctx, balanceRes)
+	return
+
 }
 
 // DataViewApiKeyPaymasterRecallDetailList
@@ -241,7 +266,7 @@ func DataViewSponsoredMetrics(ctx *gin.Context) {
 
 type apiKeyDataView struct {
 	ApiName         string  `json:"api_name"`
-	RequestCount    int     `json:"request_count"`
+	RequestCount    int64   `json:"request_count"`
 	SuccessRateDate float32 `json:"success_rate"`
 	ApiKey          string  `json:"api_key"`
 }
@@ -261,11 +286,66 @@ var mockapiKeyDataView = []apiKeyDataView{
 // @Success 200
 // @Security JWT
 func DataViewApiKeysOverView(ctx *gin.Context) {
-
 	response := model.GetResponse()
-	//healthList := make([]healthData, 0)
-	//response.WithDataSuccess(ctx, healthList)
-	response.WithDataSuccess(ctx, mockapiKeyDataView)
+
+	userId := ctx.GetString("user_id")
+	if userId == "" {
+		response.FailCode(ctx, 400, "user_id is required")
+		return
+	}
+	achieveAPIkeyModels, err := repository.SelectApiKeyListByUserId(userId)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		response.WithDataSuccess(ctx, nil)
+		return
+	}
+	if err != nil {
+		response.FailCode(ctx, 500, err.Error())
+		return
+	}
+
+	apikeyMap := make(map[string]model.ApiKeyModel)
+	apiKeys := make([]string, 0)
+	for _, apiKeyModel := range achieveAPIkeyModels {
+		apikeyMap[apiKeyModel.ApiKey] = apiKeyModel
+		apiKeys = append(apiKeys, apiKeyModel.ApiKey)
+	}
+	logrus.Debugf("apiKeys: %v", apiKeys)
+
+	viewResults, err := data_view_repository.GetApiKeysRequestDayRequestCount(apiKeys)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		apiKeyDataViews := make([]apiKeyDataView, 0)
+		for key, value := range apikeyMap {
+			apiKeyDataViews = append(apiKeyDataViews, apiKeyDataView{
+				ApiName:         value.KeyName,
+				RequestCount:    0,
+				SuccessRateDate: 0,
+				ApiKey:          key,
+			})
+		}
+		response.WithDataSuccess(ctx, apiKeyDataViews)
+		return
+	}
+	logrus.Debugf("viewResults: %v", viewResults)
+	if err != nil {
+		response.FailCode(ctx, 500, err.Error())
+		return
+	}
+	apiKeyDataViews := make([]apiKeyDataView, 0)
+	for _, result := range *viewResults {
+		apiKey := result.ProjectApikey
+		apiKeyName := apikeyMap[apiKey].KeyName
+		succesCount := result.SuccessCount
+		failureCount := result.FailureCount
+		totalCount := succesCount + failureCount
+		successRate := (float32(succesCount) / float32(totalCount)) * 100
+		apiKeyDataViews = append(apiKeyDataViews, apiKeyDataView{
+			ApiName:         apiKeyName,
+			RequestCount:    totalCount,
+			SuccessRateDate: successRate,
+			ApiKey:          apiKey,
+		})
+	}
+	response.WithDataSuccess(ctx, apiKeyDataViews)
 }
 
 type paymasterPayTypeMetric struct {
