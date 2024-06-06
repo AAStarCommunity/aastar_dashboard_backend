@@ -293,31 +293,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/data/request_count_one": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "description": "DataViewRequestCountOne",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "DataViewRequestCountOne"
-                ],
-                "summary": "DataViewRequestCountOne",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
         "/api/v1/data/request_health_list": {
             "get": {
                 "security": [
@@ -336,6 +311,55 @@ const docTemplate = `{
                     "DataViewRequestHealth"
                 ],
                 "summary": "DataViewRequestHealth",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Api Key",
+                        "name": "api_key",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/data/request_health_one": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "DataViewRequestHealthOneByApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DataViewRequestHealthOneByApiKey"
+                ],
+                "summary": "DataViewRequestHealthOneByApiKey",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "api_key",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Time Type",
+                        "name": "time_type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -390,56 +414,6 @@ const docTemplate = `{
                     "DataViewSponsoredMetrics"
                 ],
                 "summary": "DataViewSponsoredMetrics",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/api/v1/data/success_rate_list": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "description": "DataViewSuccessRate",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "DataViewSuccessRate"
-                ],
-                "summary": "DataViewSuccessRate",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/api/v1/data/success_rate_one": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "description": "DataViewSuccessRateOne",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "DataViewSuccessRateOne"
-                ],
-                "summary": "DataViewSuccessRateOne",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -602,18 +576,13 @@ const docTemplate = `{
                 ],
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "PaymasterStrategy Code",
-                        "name": "strategy_code",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Status",
-                        "name": "status",
-                        "in": "query",
-                        "required": true
+                        "description": "ChangeStrategyStatusRequest Model",
+                        "name": "ChangeStrategyStatusRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.ChangeStrategyStatusRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -698,6 +667,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "controller.ChangeStrategyStatusRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                },
+                "strategy_code": {
+                    "type": "string"
+                }
+            }
+        },
         "model.ApplyApiKeyRequest": {
             "type": "object",
             "properties": {

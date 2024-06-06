@@ -1,5 +1,12 @@
 basePath: /api
 definitions:
+  controller.ChangeStrategyStatusRequest:
+    properties:
+      status:
+        type: string
+      strategy_code:
+        type: string
+    type: object
   model.ApplyApiKeyRequest:
     properties:
       api_key_name:
@@ -257,26 +264,16 @@ paths:
       summary: DataViewApiKeyPaymasterRecallDetailList
       tags:
       - DataViewApiKeyPaymasterRecallDetailList
-  /api/v1/data/request_count_one:
-    get:
-      consumes:
-      - application/json
-      description: DataViewRequestCountOne
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      security:
-      - JWT: []
-      summary: DataViewRequestCountOne
-      tags:
-      - DataViewRequestCountOne
   /api/v1/data/request_health_list:
     get:
       consumes:
       - application/json
       description: DataViewRequestHealth
+      parameters:
+      - description: Api Key
+        in: query
+        name: api_key
+        type: string
       produces:
       - application/json
       responses:
@@ -287,6 +284,32 @@ paths:
       summary: DataViewRequestHealth
       tags:
       - DataViewRequestHealth
+  /api/v1/data/request_health_one:
+    get:
+      consumes:
+      - application/json
+      description: DataViewRequestHealthOneByApiKey
+      parameters:
+      - description: API Key
+        in: query
+        name: api_key
+        required: true
+        type: string
+      - description: Time Type
+        in: query
+        name: time_type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: DataViewRequestHealthOneByApiKey
+      tags:
+      - DataViewRequestHealthOneByApiKey
   /api/v1/data/sponsor_transaction_list:
     get:
       consumes:
@@ -321,36 +344,6 @@ paths:
       summary: DataViewSponsoredMetrics
       tags:
       - DataViewSponsoredMetrics
-  /api/v1/data/success_rate_list:
-    get:
-      consumes:
-      - application/json
-      description: DataViewSuccessRate
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      security:
-      - JWT: []
-      summary: DataViewSuccessRate
-      tags:
-      - DataViewSuccessRate
-  /api/v1/data/success_rate_one:
-    get:
-      consumes:
-      - application/json
-      description: DataViewSuccessRateOne
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      security:
-      - JWT: []
-      summary: DataViewSuccessRateOne
-      tags:
-      - DataViewSuccessRateOne
   /api/v1/paymaster_strategy:
     delete:
       consumes:
@@ -440,16 +433,12 @@ paths:
       - application/json
       description: SwitchStrategyStatus
       parameters:
-      - description: PaymasterStrategy Code
-        in: query
-        name: strategy_code
+      - description: ChangeStrategyStatusRequest Model
+        in: body
+        name: ChangeStrategyStatusRequest
         required: true
-        type: string
-      - description: Status
-        in: query
-        name: status
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/controller.ChangeStrategyStatusRequest'
       responses:
         "200":
           description: OK

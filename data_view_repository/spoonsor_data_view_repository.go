@@ -4,6 +4,7 @@ import (
 	"aastar_dashboard_back/global_const"
 	"aastar_dashboard_back/model"
 	"gorm.io/datatypes"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -85,6 +86,20 @@ type GetApiKeysRequestDayRequestCountResult struct {
 	FailureCount  int64  `json:"failure_count"`
 }
 
+func GetApiKeyRequestHealth(apikey string, startTime time.Time, endTime time.Time) (*GetApiKeysRequestDayRequestCountResult, error) {
+	var result GetApiKeysRequestDayRequestCountResult
+	tx := dataVeiewDB.Model(&PaymasterRecallLogDbModel{}).
+		Select("project_apikey, COUNT(CASE WHEN status = 200 THEN 1 END) AS success_count, COUNT(CASE WHEN status != 200 THEN 1 END) AS failure_count").
+		Where("created_at >= ? AND created_at < ?", startTime, endTime).
+		Where("project_apikey = ?", apikey).
+		Group("project_apikey").
+		Scan(&result)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return &result, nil
+}
+
 // GetApiKeysRequestDayRequestCount  TODO Optimize (will use middle Table)
 func GetApiKeysRequestDayRequestCount(apikeys []string) (*[]GetApiKeysRequestDayRequestCountResult, error) {
 	var results []GetApiKeysRequestDayRequestCountResult
@@ -97,5 +112,61 @@ func GetApiKeysRequestDayRequestCount(apikeys []string) (*[]GetApiKeysRequestDay
 		return nil, err
 	}
 	return &results, nil
+}
 
+type RequestHealth struct {
+	Time         time.Time `json:"time"`
+	SuccessCount int64     `json:"success_count"`
+	FailureCount int64     `json:"failure_count"`
+}
+
+func GetRequestHealthDay(userId string, apiKey string, startDay time.Time, endDay time.Time) (*[]RequestHealth, error) {
+	var results []RequestHealth
+	tx := dataVeiewDB.Model(&PaymasterRecallLogDbModel{}).
+		Select(`
+			DATE(created_at) AS time ,
+			COUNT(CASE WHEN status = 200 THEN 1 END) AS success_count,
+			COUNT(CASE WHEN status != 200 THEN 1 END) AS failure_count
+		`).
+		Where("project_user_id = ?", userId).
+		Where("created_at >= ? AND created_at < ?", startDay, endDay)
+	if apiKey != "" {
+		tx = tx.Where("project_apikey = ?", apiKey)
+	}
+	err := tx.Group("DATE(created_at)").
+		Order("DATE(created_at)").
+		Scan(&results).Error
+	if err != nil {
+		return nil, err
+	}
+	return &results, nil
+}
+func GetRequestHealthHour() {
+
+}
+
+type DayMetrics struct {
+	Time  time.Time `json:"time"`
+	Value float64   `json:"value"`
+}
+
+func GetSponsorDayMetrics(userId string, startDay time.Time, endDay time.Time) (*[]DayMetrics, error) {
+	var results []DayMetrics
+	dailyUpdates := dataVeiewDB.Table("relay_user_sponsor_balance_update_log").
+		Select("DATE(created_at) AS time, "+
+			"SUM(CASE WHEN update_type = 'lock' THEN amount ELSE 0 END) AS total_lock, "+
+			"SUM(CASE WHEN update_type = 'release' THEN amount ELSE 0 END) AS total_release").
+		Where("created_at >= ? AND created_at < ?", startDay, endDay).
+		Where("pay_user_id = ?", userId).
+		Group("DATE(created_at)").
+		Session(&gorm.Session{NewDB: true})
+
+	err := dataVeiewDB.Table("(?) AS daily_updates", dailyUpdates).
+		Select("time, SUM(total_lock - total_release) OVER (ORDER BY time) AS value").
+		Order("time").
+		Scan(&results).Error
+	if err != nil {
+		return nil, err
+	}
+	return &results, nil
 }
