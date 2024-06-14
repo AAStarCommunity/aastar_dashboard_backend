@@ -120,7 +120,7 @@ type RequestHealth struct {
 	FailureCount int64     `json:"failure_count"`
 }
 
-func GetRequestHealthDay(userId string, apiKey string, startDay time.Time, endDay time.Time) (*[]RequestHealth, error) {
+func GetRequestHealthDay(userId string, apiKey string, startDay time.Time, endDay time.Time) ([]RequestHealth, error) {
 	var results []RequestHealth
 	tx := dataVeiewDB.Model(&PaymasterRecallLogDbModel{}).
 		Select(`
@@ -136,10 +136,8 @@ func GetRequestHealthDay(userId string, apiKey string, startDay time.Time, endDa
 	err := tx.Group("DATE(created_at)").
 		Order("DATE(created_at)").
 		Scan(&results).Error
-	if err != nil {
-		return nil, err
-	}
-	return &results, nil
+
+	return results, err
 }
 func GetRequestHealthHour() {
 
@@ -150,7 +148,7 @@ type DayMetrics struct {
 	Value float64   `json:"value"`
 }
 
-func GetSponsorDayMetrics(userId string, startDay time.Time, endDay time.Time) (*[]DayMetrics, error) {
+func GetSponsorDayMetrics(userId string, startDay time.Time, endDay time.Time) ([]DayMetrics, error) {
 	var results []DayMetrics
 	dailyUpdates := dataVeiewDB.Table("relay_user_sponsor_balance_update_log").
 		Select("DATE(created_at) AS time, "+
@@ -165,8 +163,6 @@ func GetSponsorDayMetrics(userId string, startDay time.Time, endDay time.Time) (
 		Select("time, SUM(total_lock - total_release) OVER (ORDER BY time) AS value").
 		Order("time").
 		Scan(&results).Error
-	if err != nil {
-		return nil, err
-	}
-	return &results, nil
+
+	return results, err
 }

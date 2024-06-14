@@ -113,7 +113,7 @@ func DataViewRequestHealth(ctx *gin.Context) {
 		response.FailCode(ctx, 500, err.Error())
 		return
 	}
-	for _, requestHealth := range *requestHealthList {
+	for _, requestHealth := range requestHealthList {
 		successRate := float32(requestHealth.SuccessCount) / float32(requestHealth.SuccessCount+requestHealth.FailureCount) * 100
 		resultList = append(resultList, healthData{
 			Time:        requestHealth.Time.Format("2006-01-02"),
@@ -304,7 +304,7 @@ func DataViewSponsoredMetrics(ctx *gin.Context) {
 		return
 	}
 	sponsorMetrics := make([]sponsorMetric, 0)
-	for _, sponsorDayMetric := range *sponsorDayMetrics {
+	for _, sponsorDayMetric := range sponsorDayMetrics {
 		sponsorMetrics = append(sponsorMetrics, sponsorMetric{
 			Time:  sponsorDayMetric.Time.Format("2006-01-02"),
 			Value: float32(sponsorDayMetric.Value),
