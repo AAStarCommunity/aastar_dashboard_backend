@@ -152,6 +152,37 @@ func DeleteStrategy(ctx *gin.Context) {
 	response.Success(ctx)
 }
 
+type ChangeStrategyStatusRequest struct {
+	StrategyCode string `json:"strategy_code"`
+	Status       string `json:"status"`
+}
+
+// SwitchStrategyStatus
+// @Tags SwitchStrategyStatus
+// @Description SwitchStrategyStatus
+// @Accept json
+// @Product json
+// @Param ChangeStrategyStatusRequest  body  ChangeStrategyStatusRequest true "ChangeStrategyStatusRequest Model"
+// @Router /api/v1/paymaster_strategy/switch_status  [put]
+// @Success 200
+// @Security JWT
+func SwitchStrategyStatus(ctx *gin.Context) {
+	response := model.GetResponse()
+	request := ChangeStrategyStatusRequest{}
+	err := ctx.ShouldBindJSON(&request)
+	if err != nil {
+		response.FailCode(ctx, 400, err.Error())
+		return
+	}
+	err = repository.SwitchStrategyStatus(request.StrategyCode, request.Status)
+	if err != nil {
+		response.FailCode(ctx, 500, err.Error())
+		return
+	}
+	response.Success(ctx)
+
+}
+
 // GetStrategyList
 // @Tags GetStrategyList
 // @Description GetStrategyList

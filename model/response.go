@@ -59,13 +59,16 @@ type Response struct {
 
 // Fail represents 5XX error
 func (r *Response) Fail(ctx *gin.Context) *Response {
+
 	r.SetCode(http.StatusInternalServerError)
+	r.httpCode = http.StatusInternalServerError
 	r.json(ctx)
 	return r
 }
 
 // FailCode customer error codes
 func (r *Response) FailCode(ctx *gin.Context, code int, msg ...string) *Response {
+	r.httpCode = code
 	r.SetCode(code)
 	if msg != nil {
 		r.WithMessage(msg[0])
@@ -117,7 +120,7 @@ type defaultRes struct {
 // WithData represents response with data
 func (r *Response) WithData(data interface{}) *Response {
 	switch data.(type) {
-	case string, int, bool:
+	case string, int, bool, float32, float64:
 		r.Result.Data = &defaultRes{Result: data}
 	default:
 		r.Result.Data = data

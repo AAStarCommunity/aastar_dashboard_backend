@@ -15,10 +15,24 @@ type UploadStrategyRequest struct {
 }
 
 type UploadApiKeyRequest struct {
-	ApiKey     string `json:"api_key"`
-	ApiKeyName string `json:"api_key_name"`
+	ApiKey                        string   `json:"api_key"`
+	ApiKeyName                    string   `json:"api_key_name"`
+	NetWorkLimitEnable            bool     `json:"network_limit_enable"`
+	DomainWhitelist               []string `json:"domain_whitelist"`
+	IPWhiteList                   []string `json:"ip_white_list"`
+	PaymasterEnable               bool     `json:"paymaster_enable"`
+	Erc20PaymasterEnable          bool     `json:"erc20_paymaster_enable"`
+	ProjectSponsorPaymasterEnable bool     `json:"project_sponsor_paymaster_enable"`
+	UserPayPaymasterEnable        bool     `json:"user_pay_paymaster_enable"`
 }
 
 type ApplyApiKeyRequest struct {
-	ApiKeyName string `json:"api_key_name"`
+	ApiKeyName                    string   `json:"api_key_name"`
+	NetWorkLimitEnable            bool     `json:"network_limit_enable"`
+	DomainWhitelist               []string `json:"domain_whitelist"`
+	IPWhiteList                   []string `json:"ip_white_list"`
+	PaymasterEnable               bool     `json:"paymaster_enable"`
+	Erc20PaymasterEnable          bool     `json:"erc20_paymaster_enable"`
+	ProjectSponsorPaymasterEnable bool     `json:"project_sponsor_paymaster_enable"`
+	UserPayPaymasterEnable        bool     `json:"user_pay_paymaster_enable"`
 }

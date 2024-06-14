@@ -15,6 +15,15 @@ func SelectApiKeyListByUserId(userId string) (apikeys []model.ApiKeyModel, err e
 	}
 	return apikeys, nil
 }
+func SelectApikeyListByUserId(userId string) (apikeys []string, err error) {
+	apikeys = make([]string, 0)
+	tx := dataBase.Model(&model.ApiKeyModel{}).Where("user_id = ?", userId).Pluck("api_key", &apikeys)
+	if tx.Error != nil {
+		return apikeys, xerrors.Errorf("error when finding apikeys: %w", tx.Error)
+	}
+	return apikeys, nil
+
+}
 
 func DeleteApiKeyByApiKey(apiKey string) (err error) {
 	tx := dataBase.Where("api_key = ?", apiKey).Delete(&model.ApiKeyModel{})

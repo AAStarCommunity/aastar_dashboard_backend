@@ -175,6 +175,252 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/data/api_keys_data_overview": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "DataViewApiKeysOverView",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DataViewApiKeysOverView"
+                ],
+                "summary": "DataViewApiKeysOverView",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/data/balance": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "DataViewGetBalance",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DataViewGetBalance"
+                ],
+                "summary": "DataViewGetBalance",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "is_test_net",
+                        "name": "is_test_net",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/data/paymaster_pay_type_metrics": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "DataViewPaymasterPayTypeMetrics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DataViewPaymasterPayTypeMetrics"
+                ],
+                "summary": "DataViewPaymasterPayTypeMetrics",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/data/paymaster_requests": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "DataViewApiKeyPaymasterRecallDetailList",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DataViewApiKeyPaymasterRecallDetailList"
+                ],
+                "summary": "DataViewApiKeyPaymasterRecallDetailList",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Api Key",
+                        "name": "api_key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/data/request_health_list": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "DataViewRequestHealth",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DataViewRequestHealth"
+                ],
+                "summary": "DataViewRequestHealth",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Api Key",
+                        "name": "api_key",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/data/request_health_one": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "DataViewRequestHealthOneByApiKey",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DataViewRequestHealthOneByApiKey"
+                ],
+                "summary": "DataViewRequestHealthOneByApiKey",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "API Key",
+                        "name": "api_key",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Time Type",
+                        "name": "time_type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/data/sponsor_transaction_list": {
+            "get": {
+                "description": "DataViewGetSponsorTransactionList",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DataViewGetSponsorTransactionList"
+                ],
+                "summary": "DataViewGetSponsorTransactionList",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "is_test_net",
+                        "name": "is_test_net",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/data/sponsored_metrics": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "DataViewSponsoredMetrics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DataViewSponsoredMetrics"
+                ],
+                "summary": "DataViewSponsoredMetrics",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/paymaster_strategy": {
             "get": {
                 "security": [
@@ -314,6 +560,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/paymaster_strategy/switch_status": {
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "SwitchStrategyStatus",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SwitchStrategyStatus"
+                ],
+                "parameters": [
+                    {
+                        "description": "ChangeStrategyStatusRequest Model",
+                        "name": "ChangeStrategyStatusRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.ChangeStrategyStatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/user": {
             "get": {
                 "security": [
@@ -389,11 +667,49 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "controller.ChangeStrategyStatusRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                },
+                "strategy_code": {
+                    "type": "string"
+                }
+            }
+        },
         "model.ApplyApiKeyRequest": {
             "type": "object",
             "properties": {
                 "api_key_name": {
                     "type": "string"
+                },
+                "domain_whitelist": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "erc20_paymaster_enable": {
+                    "type": "boolean"
+                },
+                "ip_white_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "network_limit_enable": {
+                    "type": "boolean"
+                },
+                "paymaster_enable": {
+                    "type": "boolean"
+                },
+                "project_sponsor_paymaster_enable": {
+                    "type": "boolean"
+                },
+                "user_pay_paymaster_enable": {
+                    "type": "boolean"
                 }
             }
         },
@@ -405,6 +721,33 @@ const docTemplate = `{
                 },
                 "api_key_name": {
                     "type": "string"
+                },
+                "domain_whitelist": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "erc20_paymaster_enable": {
+                    "type": "boolean"
+                },
+                "ip_white_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "network_limit_enable": {
+                    "type": "boolean"
+                },
+                "paymaster_enable": {
+                    "type": "boolean"
+                },
+                "project_sponsor_paymaster_enable": {
+                    "type": "boolean"
+                },
+                "user_pay_paymaster_enable": {
+                    "type": "boolean"
                 }
             }
         },
