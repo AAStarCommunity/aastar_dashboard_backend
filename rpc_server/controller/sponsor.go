@@ -3,7 +3,6 @@ package controller
 import (
 	"aastar_dashboard_back/config"
 	"aastar_dashboard_back/model"
-	"aastar_dashboard_back/util"
 	"bytes"
 	"context"
 	"crypto/sha256"
@@ -12,6 +11,7 @@ import (
 	"fmt"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/xerrors"
@@ -84,7 +84,7 @@ func SponsorDeposit(ctx *gin.Context) {
 	hash := sha256.New()
 	hash.Write(jsonData)
 	hashBytes := hash.Sum(nil)
-	signatureByte, err := util.GetSign(hashBytes, config.GetSignerEoa().PrivateKey)
+	signatureByte, err := crypto.Sign(hashBytes, config.GetSignerEoa().PrivateKey)
 	if err != nil {
 		fmt.Println("Error signing message:", err)
 		return
