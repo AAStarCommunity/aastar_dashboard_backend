@@ -16,8 +16,5 @@ type ApiKeyModel struct {
 }
 
 func (ApiKeyModel) TableName() string {
-	if env.Environment.IsProduction() {
-		return "aastar_api_key_prod"
-	}
-	return "aastar_api_key_dev"
+	return "aastar_api_key"
 }

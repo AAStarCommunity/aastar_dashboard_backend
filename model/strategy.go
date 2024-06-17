@@ -20,10 +20,7 @@ type PaymasterStrategy struct {
 }
 
 func (PaymasterStrategy) TableName() string {
-	if env.Environment.IsProduction() {
-		return "aastar_strategy_prod"
-	}
-	return "aastar_strategy_dev"
+	return "aastar_strategy"
 }
 
 type StrategyExecuteRestriction struct {
