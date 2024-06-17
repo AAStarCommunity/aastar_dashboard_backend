@@ -1,7 +1,6 @@
 package model
 
 import (
-	"aastar_dashboard_back/env"
 	"gorm.io/datatypes"
 )
 

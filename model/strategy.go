@@ -1,7 +1,6 @@
 package model
 
 import (
-	"aastar_dashboard_back/env"
 	"aastar_dashboard_back/global_const"
 	"gorm.io/datatypes"
 	"math/big"
