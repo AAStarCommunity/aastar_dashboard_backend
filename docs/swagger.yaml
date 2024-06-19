@@ -7,6 +7,15 @@ definitions:
       strategy_code:
         type: string
     type: object
+  controller.DepositSponsorRequest:
+    properties:
+      is_test_net:
+        type: boolean
+      tx_hash:
+        type: string
+    type: object
+  controller.WithdrawSponsorRequest:
+    type: object
   model.ApplyApiKeyRequest:
     properties:
       api_key_name:
@@ -446,6 +455,46 @@ paths:
       - JWT: []
       tags:
       - SwitchStrategyStatus
+  /api/v1/sponsor/deposit:
+    post:
+      consumes:
+      - application/json
+      description: SponsorDeposit
+      parameters:
+      - description: DepositSponsorRequest Model
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.DepositSponsorRequest'
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: SponsorDeposit
+      tags:
+      - Sponsor
+  /api/v1/sponsor/withdraw:
+    post:
+      consumes:
+      - application/json
+      description: SponsorWithdraw
+      parameters:
+      - description: WithdrawSponsorRequest Model
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.WithdrawSponsorRequest'
+      responses:
+        "200":
+          description: OK
+      security:
+      - JWT: []
+      summary: SponsorWithdraw
+      tags:
+      - Sponsor
   /api/v1/user:
     get:
       consumes:
