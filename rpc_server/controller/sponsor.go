@@ -8,7 +8,9 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -149,7 +151,7 @@ func GetInfoByHash(txHash string, client *ethclient.Client) (*types.Transaction,
 	//TODO consider about pending
 	tx, _, err := client.TransactionByHash(context.Background(), txHashHex)
 	if err != nil {
-		if err.Error() == "not found" {
+		if errors.Is(err, ethereum.NotFound) {
 			return nil, xerrors.Errorf("Transaction [%s] not found", txHash)
 		}
 		return nil, err
