@@ -359,7 +359,7 @@ func DataViewApiKeysOverView(ctx *gin.Context) {
 	logrus.Debugf("apiKeys: %v", apiKeys)
 
 	viewResults, err := data_view_repository.GetApiKeysRequestDayRequestCount(apiKeys)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
+	if errors.Is(err, gorm.ErrRecordNotFound) || viewResults == nil || len(*viewResults) == 0 {
 		apiKeyDataViews := make([]apiKeyDataView, 0)
 		for key, value := range apikeyMap {
 			apiKeyDataViews = append(apiKeyDataViews, apiKeyDataView{
