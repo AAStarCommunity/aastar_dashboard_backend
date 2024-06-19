@@ -1,7 +1,6 @@
 package model
 
 import (
-	"aastar_dashboard_back/env"
 	"gorm.io/datatypes"
 )
 
@@ -19,8 +18,5 @@ type User struct {
 }
 
 func (User) TableName() string {
-	if env.Environment.IsProduction() {
-		return "aastar_user_prod"
-	}
-	return "aastar_user_dev"
+	return "aastar_user"
 }

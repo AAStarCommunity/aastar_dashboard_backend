@@ -33,42 +33,6 @@ type githubAccessToken struct {
 	Scope       string `json:"scope"`
 }
 
-/*
-	{
-	  "login": "fanhousanbu",
-	  "id": 6702542,
-	  "node_id": "MDQ6VXNlcjY3MDI1NDI=",
-	  "avatar_url": "https://avatars.githubusercontent.com/u/6702542?v=4",
-	  "gravatar_id": "",
-	  "url": "https://api.github.com/users/fanhousanbu",
-	  "html_url": "https://github.com/fanhousanbu",
-	  "followers_url": "https://api.github.com/users/fanhousanbu/followers",
-	  "following_url": "https://api.github.com/users/fanhousanbu/following{/other_user}",
-	  "gists_url": "https://api.github.com/users/fanhousanbu/gists{/gist_id}",
-	  "starred_url": "https://api.github.com/users/fanhousanbu/starred{/owner}{/repo}",
-	  "subscriptions_url": "https://api.github.com/users/fanhousanbu/subscriptions",
-	  "organizations_url": "https://api.github.com/users/fanhousanbu/orgs",
-	  "repos_url": "https://api.github.com/users/fanhousanbu/repos",
-	  "events_url": "https://api.github.com/users/fanhousanbu/events{/privacy}",
-	  "received_events_url": "https://api.github.com/users/fanhousanbu/received_events",
-	  "type": "User",
-	  "site_admin": false,
-	  "name": "徐超越",
-	  "company": null,
-	  "blog": "https://www.gotocloud.vip",
-	  "location": "杭州",
-	  "email": "go-to-cloud@qq.com",
-	  "hireable": null,
-	  "bio": null,
-	  "twitter_username": null,
-	  "public_repos": 17,
-	  "public_gists": 0,
-	  "followers": 10,
-	  "following": 4,
-	  "created_at": "2014-02-17T08:06:15Z",
-	  "updated_at": "2024-05-10T05:15:11Z"
-	}
-*/
 type githubUserInfo struct {
 	Id        int    `json:"id"`
 	Login     string `json:"login"`
