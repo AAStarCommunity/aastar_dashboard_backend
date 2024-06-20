@@ -116,7 +116,7 @@ func SponsorDeposit(ctx *gin.Context) {
 		return
 	}
 
-	resp.Body.Close()
+	defer resp.Body.Close()
 
 	response.WithDataSuccess(ctx, string(body))
 }
