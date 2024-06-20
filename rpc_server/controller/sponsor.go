@@ -17,7 +17,6 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"golang.org/x/xerrors"
 	"io"
 	"math/big"
@@ -117,20 +116,7 @@ func SponsorDeposit(ctx *gin.Context) {
 		return
 	}
 
-	defer func(Body io.ReadCloser) {
-		if p := recover(); p != nil {
-			logrus.Error("panic: ", p)
-			return
-		}
-		if Body == nil {
-			return
-		}
-		err := Body.Close()
-		if err != nil {
-			logrus.Error("close body error: ", err)
-			return
-		}
-	}(resp.Body)
+	resp.Body.Close()
 
 	response.WithDataSuccess(ctx, string(body))
 }
