@@ -592,6 +592,72 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/sponsor/deposit": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "SponsorDeposit",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sponsor"
+                ],
+                "summary": "SponsorDeposit",
+                "parameters": [
+                    {
+                        "description": "DepositSponsorRequest Model",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.DepositSponsorRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/sponsor/withdraw": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "SponsorWithdraw",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Sponsor"
+                ],
+                "summary": "SponsorWithdraw",
+                "parameters": [
+                    {
+                        "description": "WithdrawSponsorRequest Model",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.WithdrawSponsorRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/user": {
             "get": {
                 "security": [
@@ -677,6 +743,20 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "controller.DepositSponsorRequest": {
+            "type": "object",
+            "properties": {
+                "is_test_net": {
+                    "type": "boolean"
+                },
+                "tx_hash": {
+                    "type": "string"
+                }
+            }
+        },
+        "controller.WithdrawSponsorRequest": {
+            "type": "object"
         },
         "model.ApplyApiKeyRequest": {
             "type": "object",

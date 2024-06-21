@@ -14,7 +14,7 @@ var (
 	KeyJwtSecret = "JWT.Security"
 	KeyJwtRealm  = "JWT.Realm"
 )
-var SignaerEoa *model.EOA
+var signerEoa *model.EOA
 
 func AllConfig() map[string]any {
 	return systemConfigViper.AllSettings()
@@ -36,14 +36,20 @@ func Init(configPath string) {
 	if err != nil {
 		panic(fmt.Sprintf("signer key error: %s", err))
 	}
-	SignaerEoa = eoa
+	signerEoa = eoa
 
+}
+func GetSignerEoa() *model.EOA {
+	return signerEoa
 }
 func GetSystemConfigByKey(key string) string {
 	return systemConfigViper.GetString(key)
 }
 func GetSystemConfigInt64yKey(key string) int64 {
 	return systemConfigViper.GetInt64(key)
+}
+func GetRelayUrl() string {
+	return systemConfigViper.GetString("paymaster_relay_url")
 }
 func GetDsn() string {
 	return fmt.Sprintf(dscTemplate,
