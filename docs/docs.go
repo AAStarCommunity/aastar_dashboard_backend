@@ -369,6 +369,11 @@ const docTemplate = `{
         },
         "/api/v1/data/sponsor_transaction_list": {
             "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "DataViewGetSponsorTransactionList",
                 "consumes": [
                     "application/json"
