@@ -149,6 +149,7 @@ type transactionLog struct {
 // @Router /api/v1/data/sponsor_transaction_list [get]
 // @Param is_test_net query bool true "is_test_net"
 // @Success 200
+// @Security JWT
 func DataViewGetSponsorTransactionList(ctx *gin.Context) {
 	response := model.GetResponse()
 	userId := ctx.GetString("user_id")
@@ -156,24 +157,34 @@ func DataViewGetSponsorTransactionList(ctx *gin.Context) {
 		response.FailCode(ctx, 400, "user_id is required")
 		return
 	}
-	isTestNet := ctx.Param("is_test_net")
-	isTestNetBool := isTestNet == "true"
-	trasnLog, err := data_view_repository.GetDepositAndWithDrawLog(userId, isTestNetBool)
+	isTestNet := ctx.Query("is_test_net")
+	isTestNetBool, err := strconv.ParseBool(isTestNet)
+	if err != nil {
+		response.FailCode(ctx, 400, err.Error())
+		return
+	}
+	sponsorLogs, err := data_view_repository.GetDepositAndWithDrawLog(userId, isTestNetBool)
 	if err != nil {
 		response.FailCode(ctx, 500, err.Error())
 		return
 	}
-	transactionLogs := make([]transactionLog, 0)
-	for _, log := range trasnLog {
-		transactionLogs = append(transactionLogs, transactionLog{
-			UpdateType: log.UpdateType,
-			IsTestNet:  log.IsTestNet,
-			Amount:     log.Amount,
-			TxHash:     log.TxHash,
-			Time:       log.CreatedAt.Format("2006-01-02 15:04:05"),
-		})
+	transactionLogResults := make([]transactionLog, 0)
+	for _, sponsorLog := range sponsorLogs {
+		logResult := transactionLog{
+			UpdateType: sponsorLog.UpdateType,
+			IsTestNet:  sponsorLog.IsTestNet,
+			Amount:     sponsorLog.Amount,
+			Time:       sponsorLog.CreatedAt.Format("2006-01-02 15:04:05"),
+		}
+		if sponsorLog.TxHash == "" {
+			logResult.TxHash = sponsorLog.UserOpHash
+		} else {
+			logResult.TxHash = sponsorLog.TxHash
+		}
+		transactionLogResults = append(transactionLogResults, logResult)
+
 	}
-	response.WithDataSuccess(ctx, transactionLogs)
+	response.WithDataSuccess(ctx, transactionLogResults)
 
 }
 
@@ -196,7 +207,6 @@ func DataViewGetBalance(ctx *gin.Context) {
 	}
 
 	isTestNet := ctx.Query("is_test_net")
-	logrus.Info("isTestNet: ", isTestNet)
 	isTestNetBool, err := strconv.ParseBool(isTestNet)
 	if err != nil {
 		response.FailCode(ctx, 400, err.Error())

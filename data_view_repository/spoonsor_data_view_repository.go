@@ -1,7 +1,6 @@
 package data_view_repository
 
 import (
-	"aastar_dashboard_back/global_const"
 	"aastar_dashboard_back/model"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
@@ -46,8 +45,8 @@ type PaymasterRecallLogDbModel struct {
 	PaymasterMethod string         `gorm:"column:paymaster_method;type:varchar(25)" json:"paymaster_method"`
 	SendTime        string         `gorm:"column:send_time;type:varchar(50)" json:"send_time"`
 	Latency         int64          `gorm:"column:latency;type:integer" json:"latency"`
-	RequestBody     string         `gorm:"column:request_body;type:varchar(500)" json:"request_body"`
-	ResponseBody    string         `gorm:"column:response_body;type:varchar(1000)" json:"response_body"`
+	RequestBody     string         `gorm:"column:request_body;type:varchar(2000)" json:"request_body"`
+	ResponseBody    string         `gorm:"column:response_body;type:varchar(2000)" json:"response_body"`
 	NetWork         string         `gorm:"column:network;type:varchar(25)" json:"network"`
 	Status          int            `gorm:"column:status;type:integer" json:"status"`
 	Extra           datatypes.JSON `gorm:"column:extra" json:"extra"`
@@ -66,7 +65,7 @@ func FindUserSponsorModuleByUserid(userId string, isTestNet bool) (balanceModel 
 	return balanceModel, nil
 }
 func GetDepositAndWithDrawLog(userId string, IsTestNet bool) (models []*UserSponsorBalanceUpdateLogDBModel, err error) {
-	tx := dataVeiewDB.Model(&UserSponsorBalanceUpdateLogDBModel{}).Where("pay_user_id = ?", userId).Where("is_test_net = ?", IsTestNet).Where("update_type in (?)", []global_const.UpdateType{global_const.UpdateTypeDeposit, global_const.UpdateTypeWithdraw}).Find(&models)
+	tx := dataVeiewDB.Model(&UserSponsorBalanceUpdateLogDBModel{}).Where("pay_user_id = ?", userId).Where("is_test_net = ?", IsTestNet).Order("created_at desc").Find(&models)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
