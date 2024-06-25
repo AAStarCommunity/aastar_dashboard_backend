@@ -255,6 +255,16 @@ func DataViewGetBalance(ctx *gin.Context) {
 
 }
 
+type recallDetail struct {
+	Time            string `json:"time"`
+	NetWork         string `json:"network"`
+	PaymasterMethod string `json:"paymaster_method"`
+	Latency         int64  `json:"latency"`
+	Status          int    `json:"status"`
+	RequestBody     string `json:"request_body"`
+	ResponseBody    string `json:"response_body"`
+}
+
 // DataViewApiKeyPaymasterRecallDetailList
 // @Tags DataViewApiKeyPaymasterRecallDetailList
 // @Summary DataViewApiKeyPaymasterRecallDetailList
@@ -278,7 +288,21 @@ func DataViewApiKeyPaymasterRecallDetailList(ctx *gin.Context) {
 		response.FailCode(ctx, 500, err.Error())
 		return
 	}
-	response.WithDataSuccess(ctx, res)
+	recallDetails := make([]recallDetail, 0)
+	for _, item := range res {
+		recallResult := recallDetail{
+			Time:            item.SendTime,
+			NetWork:         item.NetWork,
+			PaymasterMethod: item.PaymasterMethod,
+			Latency:         item.Latency,
+			Status:          item.Status,
+			RequestBody:     item.RequestBody,
+			ResponseBody:    item.ResponseBody,
+		}
+		recallDetails = append(recallDetails, recallResult)
+
+	}
+	response.WithDataSuccess(ctx, recallDetails)
 }
 
 type sponsorMetric struct {
