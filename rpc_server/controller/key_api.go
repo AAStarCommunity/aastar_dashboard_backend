@@ -23,6 +23,7 @@ type APIKeyVo struct {
 	Erc20PaymasterEnable          bool          `json:"erc20_paymaster_enable"`
 	ProjectSponsorPaymasterEnable bool          `json:"project_sponsor_paymaster_enable"`
 	UserPayPaymasterEnable        bool          `json:"user_pay_paymaster_enable"`
+	AiraccountEnable              bool          `json:"airaccount_enable"`
 }
 
 func convertAPiKeyDBModelToAPIKeyVo(apiKeyModel *model.ApiKeyModel) (*APIKeyVo, error) {
@@ -65,6 +66,9 @@ func convertAPiKeyDBModelToAPIKeyVo(apiKeyModel *model.ApiKeyModel) (*APIKeyVo, 
 	}
 	if extra["user_pay_paymaster_enable"] != nil {
 		apiKeyVo.UserPayPaymasterEnable = extra["user_pay_paymaster_enable"].(bool)
+	}
+	if extra["airaccount_enable"] != nil {
+		apiKeyVo.AiraccountEnable = extra["airaccount_enable"].(bool)
 	}
 	return &apiKeyVo, nil
 }
@@ -280,6 +284,7 @@ func convertUploadRequestToApiKey(uploadRequest *model.UploadApiKeyRequest) (*mo
 	extraMap["erc20_paymaster_enable"] = uploadRequest.Erc20PaymasterEnable
 	extraMap["project_sponsor_paymaster_enable"] = uploadRequest.ProjectSponsorPaymasterEnable
 	extraMap["user_pay_paymaster_enable"] = uploadRequest.UserPayPaymasterEnable
+	extraMap["airaccount_enable"] = uploadRequest.AiraccountEnable
 	extraMapJson, err := json.Marshal(extraMap)
 	if err != nil {
 		return nil, err

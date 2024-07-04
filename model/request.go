@@ -24,6 +24,7 @@ type UploadApiKeyRequest struct {
 	Erc20PaymasterEnable          bool     `json:"erc20_paymaster_enable"`
 	ProjectSponsorPaymasterEnable bool     `json:"project_sponsor_paymaster_enable"`
 	UserPayPaymasterEnable        bool     `json:"user_pay_paymaster_enable"`
+	AiraccountEnable              bool     `json:"airaccount_enable"`
 }
 
 type ApplyApiKeyRequest struct {
